@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-project(qlang_lib)
+project(qlang_tests)
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -12,9 +12,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 add_executable(qlang_tests
-        src/Lexer.h
-        src/token.h
-
+    test/LexerTest.cpp
 )
 
 target_include_directories(qlang_tests PRIVATE
@@ -24,4 +22,4 @@ target_include_directories(qlang_tests PRIVATE
 target_link_libraries(qlang_tests PRIVATE gtest gtest_main)
 
 enable_testing()
-add_test(NAME Algorithms_tests COMMAND Algorithms_tests)
+add_test(NAME qlang_tests COMMAND qlang_tests)

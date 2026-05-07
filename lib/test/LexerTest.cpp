@@ -51,3 +51,14 @@ TEST(LexerTest,Case1) {
 		EXPECT_EQ(code_lex[i].first,expected[i].first);
 	}
 }
+
+TEST(LexerTest,Case2) {
+	qlang::token::CODE expected = {
+		std::make_pair(qlang::token::Keyword::FN,std::make_pair(1,1)),
+	};
+	std::string code = "//fdfdfdfd /*()*&%$#$%&*&^&%{}[]\n/*fjdjfndjnffsfdsfdsfdffsddfsdffsfssff\ndsdsddssdssdds*/fn";
+	qlang::token::CODE code_lex = qlang::Lexer::Lex(code);
+	for (int i = 0;i<expected.size();i++) {
+		EXPECT_EQ(code_lex[i].first,expected[i].first);
+	}
+}

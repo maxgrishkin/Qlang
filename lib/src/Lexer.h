@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <map>
 #include <stdexcept>
-#include <unordered_map>
 
 #include "token.h"
 
@@ -12,8 +11,31 @@ namespace qlang::Lexer{
 		unsigned int code_length = code.size() - 1;
 		unsigned short symbol = 1;
 		unsigned int line = 1;
+		bool line_comment = false;
+		bool multi_comment = false;
 		token::CODE result;
 		for (unsigned int i = 0;i < code_length;i++) {
+			if (line_comment) {
+				if (code[i] == '\n') {
+					line_comment = false;
+					line++;
+					symbol = 1;
+				}
+				continue;
+			}
+			if (multi_comment) {
+				if (code[i] == '\n') {
+					line++;
+					symbol = 1;
+				}
+				if (code[i] == '*' && code[i+1] == '/') {
+					multi_comment = false;
+					symbol++;
+					i++;
+				}
+				symbol++;
+				continue;
+			}
 			switch (code[i]) {
 				case ' ':
 				case '\r':
@@ -25,113 +47,126 @@ namespace qlang::Lexer{
 					symbol = 1;
 					break;
 				case '(':
-					result.push_back(std::make_pair(token::LPar{},std::make_pair(line,symbol)));
+					result.emplace_back(token::LPar{},std::make_pair(line,symbol));
 					symbol++;
 					break;
 				case ')':
-					result.push_back(std::make_pair(token::RPar{},std::make_pair(line,symbol)));
+					result.emplace_back(std::make_pair(token::RPar{},std::make_pair(line,symbol)));
 					symbol++;
 					break;
 				case '{':
-					result.push_back(std::make_pair(token::LCurlyBracket{},std::make_pair(line,symbol)));
+					result.emplace_back(std::make_pair(token::LCurlyBracket{},std::make_pair(line,symbol)));
 					symbol++;
 					break;
 				case '}':
-					result.push_back(std::make_pair(token::RCurlyBracket{},std::make_pair(line,symbol)));
+					result.emplace_back(std::make_pair(token::RCurlyBracket{},std::make_pair(line,symbol)));
 					symbol++;
 					break;
 				case '[':
-					result.push_back(std::make_pair(token::LSquareBracket{},std::make_pair(line,symbol)));
+					result.emplace_back(std::make_pair(token::LSquareBracket{},std::make_pair(line,symbol)));
 					symbol++;
 					break;
 				case ']':
-					result.push_back(std::make_pair(token::RSquareBracket{},std::make_pair(line,symbol)));
+					result.emplace_back(std::make_pair(token::RSquareBracket{},std::make_pair(line,symbol)));
 					symbol++;
 					break;
 				case '<':
 					if (i != code_length - 1) {
 						if (code[i+1] == '=') {
-							result.push_back(std::make_pair(token::LAngleBracketEqual{},std::make_pair(line,symbol)));
+							result.emplace_back(std::make_pair(token::LAngleBracketEqual{},std::make_pair(line,symbol)));
 							symbol += 2;
 							i++;
 							break;
 						}
 					}
-					result.push_back(std::make_pair(token::LAngleBracket{},std::make_pair(line,symbol)));
+					result.emplace_back(std::make_pair(token::LAngleBracket{},std::make_pair(line,symbol)));
 					symbol++;
 					break;
 				case '>':
 					if (i != code_length - 1) {
 						if (code[i+1] == '=') {
-							result.push_back(std::make_pair(token::RAngleBracketEqual{},std::make_pair(line,symbol)));
+							result.emplace_back(std::make_pair(token::RAngleBracketEqual{},std::make_pair(line,symbol)));
 							symbol += 2;
 							i++;
 							break;
 						}
 					}
-					result.push_back(std::make_pair(token::RAngleBracket{},std::make_pair(line,symbol)));
+					result.emplace_back(std::make_pair(token::RAngleBracket{},std::make_pair(line,symbol)));
 					symbol++;
 					break;
 				case ';':
-					result.push_back(std::make_pair(token::Semicolon{},std::make_pair(line,symbol)));
+					result.emplace_back(std::make_pair(token::Semicolon{},std::make_pair(line,symbol)));
 					symbol++;
 					break;
 				case '+':
 					if (i != code_length - 1) {
 						if (code[i+1] == '+') {
-							result.push_back(std::make_pair(token::PlusPlus{},std::make_pair(line,symbol)));
+							result.emplace_back(std::make_pair(token::PlusPlus{},std::make_pair(line,symbol)));
 							symbol += 2;
 							i++;
 							break;
 						}
 					}
-					result.push_back(std::make_pair(token::Plus{},std::make_pair(line,symbol)));
+					result.emplace_back(std::make_pair(token::Plus{},std::make_pair(line,symbol)));
 					symbol++;
 					break;
 				case '-':
 					if (i != code_length - 1) {
 						if (code[i+1] == '-') {
-							result.push_back(std::make_pair(token::MinusMinus{},std::make_pair(line,symbol)));
+							result.emplace_back(std::make_pair(token::MinusMinus{},std::make_pair(line,symbol)));
 							symbol += 2;
 							i++;
 							break;
 						}
 					}
-					result.push_back(std::make_pair(token::Minus{},std::make_pair(line,symbol)));
+					result.emplace_back(std::make_pair(token::Minus{},std::make_pair(line,symbol)));
 					symbol++;
 					break;
 				case '*':
-					result.push_back(std::make_pair(token::Asterisk{},std::make_pair(line,symbol)));
+					result.emplace_back(std::make_pair(token::Asterisk{},std::make_pair(line,symbol)));
 					symbol++;
 					break;
 				case '/':
-					result.push_back(std::make_pair(token::Slash{},std::make_pair(line,symbol)));
+					if (i != code_length - 1) {
+						if (code[i+1] == '/') {
+							line_comment = true;
+							i++;
+							break;
+						}
+						if (code[i+1] == '*') {
+							multi_comment = true;
+							symbol += 2;
+							i++;
+							break;
+						}
+					}
+					result.emplace_back(std::make_pair(token::Slash{},std::make_pair(line,symbol)));
 					symbol++;
 					break;
 				case ',':
-					result.push_back(std::make_pair(token::Comma{},std::make_pair(line,symbol)));
+					result.emplace_back(std::make_pair(token::Comma{},std::make_pair(line,symbol)));
 					symbol++;
 					break;
 				case '.':
-					result.push_back(std::make_pair(token::Dot{},std::make_pair(line,symbol)));
+					result.emplace_back(std::make_pair(token::Dot{},std::make_pair(line,symbol)));
 					symbol++;
 					break;
 				case '=':
 					if (i != code_length - 1) {
 						if (code[i+1] == '=') {
-							result.push_back(std::make_pair(token::Equal2{},std::make_pair(line,symbol)));
+							result.emplace_back(std::make_pair(token::Equal2{},std::make_pair(line,symbol)));
 							symbol += 2;
 							i++;
 							break;
 						}
 					}
-					result.push_back(std::make_pair(token::Equal{},std::make_pair(line,symbol)));
+					result.emplace_back(std::make_pair(token::Equal{},std::make_pair(line,symbol)));
 					symbol++;
 					break;
 				case '!':
 					if (i != code_length - 1) {
 						if (code[i+1] == '=') {
-							result.push_back(std::make_pair(token::NoEqual{},std::make_pair(line,symbol)));
+							result.emplace_back(std::make_pair(token::NoEqual{},std::make_pair(line,symbol)));
 							symbol += 2;
 							i++;
 							break;
@@ -146,31 +181,31 @@ namespace qlang::Lexer{
 						i++;
 						symbol++;
 						if (code[i] == 'r') {
-							result.push_back(std::make_pair(token::Char{.value = '\r'},std::make_pair(line,presymbol)));
+							result.emplace_back(std::make_pair(token::Char{.value = '\r'},std::make_pair(line,presymbol)));
 							i++;
 							symbol += 2;
 							break;
 						}
 						if (code[i] == 't') {
-							result.push_back(std::make_pair(token::Char{.value = '\t'},std::make_pair(line,presymbol)));
+							result.emplace_back(std::make_pair(token::Char{.value = '\t'},std::make_pair(line,presymbol)));
 							i++;
 							symbol += 2;
 							break;
 						}
 						if (code[i] == 'n') {
-							result.push_back(std::make_pair(token::Char{.value = '\n'},std::make_pair(line,presymbol)));
+							result.emplace_back(std::make_pair(token::Char{.value = '\n'},std::make_pair(line,presymbol)));
 							i++;
 							symbol += 2;
 							break;
 						}
 						if (code[i] == '\\') {
-							result.push_back(std::make_pair(token::Char{.value = '\\'},std::make_pair(line,presymbol)));
+							result.emplace_back(std::make_pair(token::Char{.value = '\\'},std::make_pair(line,presymbol)));
 							i++;
 							symbol += 2;
 							break;
 						}
 						if (code[i] == '\'') {
-							result.push_back(std::make_pair(token::Char{.value = '\''},std::make_pair(line,presymbol)));
+							result.emplace_back(std::make_pair(token::Char{.value = '\''},std::make_pair(line,presymbol)));
 							i++;
 							symbol += 2;
 							break;
@@ -182,7 +217,7 @@ namespace qlang::Lexer{
 						std::string character = {code[i + 1]};
 						throw std::runtime_error("Expected ' , at line " + std::to_string(line) + ", at symbol " + std::to_string(symbol + 1));
 					}
-					result.push_back(std::make_pair(token::Char{.value = code[i]},std::make_pair(line,presymbol)));
+					result.emplace_back(std::make_pair(token::Char{.value = code[i]},std::make_pair(line,presymbol)));
 					i++;
 					symbol++;
 					break;
@@ -233,7 +268,7 @@ namespace qlang::Lexer{
 						i++;
 						symbol++;
 					}
-					result.push_back(std::make_pair(token::String{.value = res},std::make_pair(line,presymbol)));
+					result.emplace_back(std::make_pair(token::String{.value = res},std::make_pair(line,presymbol)));
 					break;
 				}
 				default: {
@@ -259,10 +294,10 @@ namespace qlang::Lexer{
 							{"else",token::Keyword::ELSE},
 						};
 						if (auto keyword = Keywords.find(text); keyword != Keywords.end()) {
-							result.push_back(std::make_pair(keyword->second,std::make_pair(line,presymbol)));
+							result.emplace_back(std::make_pair(keyword->second,std::make_pair(line,presymbol)));
 							break;
 						}
-						result.push_back(std::make_pair(token::Identifier{.value = text},std::make_pair(line,presymbol)));
+						result.emplace_back(std::make_pair(token::Identifier{.value = text},std::make_pair(line,presymbol)));
 						break;
 					}
 					if (isdigit(code[i])) {
@@ -273,7 +308,7 @@ namespace qlang::Lexer{
 							i++;
 						}
 						i--;
-						result.push_back(std::make_pair(token::Integer{.value = std::atoi(text.c_str())},std::make_pair(line,presymbol)));
+						result.emplace_back(std::make_pair(token::Integer{.value = std::atoi(text.c_str())},std::make_pair(line,presymbol)));
 						break;
 					}
 					std::string character = {code[i]};

@@ -121,6 +121,7 @@ using Any = std::variant<
                         case Keyword::FOR: return "for";
                         case Keyword::WHILE: return "while";
                         case Keyword::FOREACH: return "foreach";
+                        case Keyword::IN: return "in";
                         case Keyword::BREAK: return "break";
                         case Keyword::CONTINUE: return "continue";
                     }

@@ -7,8 +7,8 @@
 #include "token.h"
 
 namespace qlang::Lexer{
-	token::CODE Lex(std::string code) {
-		unsigned int code_length = code.size() - 1;
+	inline token::CODE Lex(std::string code) {
+		unsigned int code_length = code.size();
 		unsigned short symbol = 1;
 		unsigned int line = 1;
 		bool line_comment = false;
@@ -222,6 +222,10 @@ namespace qlang::Lexer{
 					symbol++;
 					break;
 				}
+				case '%':
+					result.emplace_back(std::make_pair(token::Percent{},std::make_pair(line,symbol)));
+					symbol++;
+					break;
 				case '"': {
 					std::string res;
 					unsigned int presymbol = symbol;
@@ -272,7 +276,7 @@ namespace qlang::Lexer{
 					break;
 				}
 				default: {
-					unsigned short presymbol = symbol;
+					unsigned short preSymbol = symbol;
 					if (std::isalpha(code[i])) {
 						std::string text;
 						while (std::isalnum(code[i])) {
@@ -294,10 +298,10 @@ namespace qlang::Lexer{
 							{"else",token::Keyword::ELSE},
 						};
 						if (auto keyword = Keywords.find(text); keyword != Keywords.end()) {
-							result.emplace_back(std::make_pair(keyword->second,std::make_pair(line,presymbol)));
+							result.emplace_back(std::make_pair(keyword->second,std::make_pair(line,preSymbol)));
 							break;
 						}
-						result.emplace_back(std::make_pair(token::Identifier{.value = text},std::make_pair(line,presymbol)));
+						result.emplace_back(std::make_pair(token::Identifier{.value = text},std::make_pair(line,preSymbol)));
 						break;
 					}
 					if (isdigit(code[i])) {
@@ -308,7 +312,7 @@ namespace qlang::Lexer{
 							i++;
 						}
 						i--;
-						result.emplace_back(std::make_pair(token::Integer{.value = std::atoi(text.c_str())},std::make_pair(line,presymbol)));
+						result.emplace_back(std::make_pair(token::Integer{.value = std::atoi(text.c_str())},std::make_pair(line,preSymbol)));
 						break;
 					}
 					std::string character = {code[i]};

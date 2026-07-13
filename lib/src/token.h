@@ -19,95 +19,48 @@ namespace qlang::token {
         CONTINUE,
         ELSE,
     };
+    struct LPar {};   // (
+    struct RPar {};   // (
+    struct LCurlyBracket {};   // {
+    struct RCurlyBracket {};   // {
+    struct LSquareBracket {};   // [
+    struct RSquareBracket {};   // [
+    struct LAngleBracket {};   // <
+    struct RAngleBracket {};   // <
+    struct LAngleBracketEqual {};   // <=
+    struct RAngleBracketEqual {};   // >=
+    struct Semicolon {};   // ;
+    struct Plus {};   // +
+    struct Minus {};   // -
+    struct Asterisk {};   // *
+    struct Slash {};   // /
+    struct Percent {};   // /
+    struct Comma {};   // ,
+    struct Dot {};   // .
+    struct Equal {};   // =
+    struct NoEqual {};   // !=
+    struct Equal2 {};   // ==
+    struct PlusPlus {};   // ++
+    struct MinusMinus {};   // --
     struct Char {
-        auto operator<=>(const Char&) const = default;
         char value;
     };
-    struct LPar {
-        auto operator<=>(const LPar&) const = default;
-    };   // (
-    struct RPar {
-        auto operator<=>(const RPar&) const = default;
-    };   // (
-    struct LCurlyBracket {
-        auto operator<=>(const LCurlyBracket&) const = default;
-    };   // {
-    struct RCurlyBracket {
-        auto operator<=>(const RCurlyBracket&) const = default;
-    };   // {
-    struct LSquareBracket {
-        auto operator<=>(const LSquareBracket&) const = default;
-    };   // [
-    struct RSquareBracket {
-        auto operator<=>(const RSquareBracket&) const = default;
-    };   // [
-    struct LAngleBracket {
-        auto operator<=>(const LAngleBracket&) const = default;
-    };   // <
-    struct RAngleBracket {
-        auto operator<=>(const RAngleBracket&) const = default;
-    };   // <
-    struct LAngleBracketEqual {
-        auto operator<=>(const LAngleBracketEqual&) const = default;
-    };   // <=
-    struct RAngleBracketEqual {
-        auto operator<=>(const RAngleBracketEqual&) const = default;
-    };   // >=
-    struct Semicolon {
-        auto operator<=>(const Semicolon&) const = default;
-    };   // ;
-    struct Plus {
-        auto operator<=>(const Plus&) const = default;
-    };   // +
-    struct Minus {
-        auto operator<=>(const Minus&) const = default;
-    };   // -
-    struct Asterisk {
-        auto operator<=>(const Asterisk&) const = default;
-    };   // *
-    struct Slash {
-        auto operator<=>(const Slash&) const = default;
-    };   // /
-    struct Comma {
-        auto operator<=>(const Comma&) const = default;
-    };   // ,
-    struct Dot {
-        auto operator<=>(const Dot&) const = default;
-    };   // .
-    struct Equal {
-        auto operator<=>(const Equal&) const = default;
-    };   // =
-    struct NoEqual {
-        auto operator<=>(const NoEqual&) const = default;
-    };   // !=
-    struct Equal2 {
-        auto operator<=>(const Equal2&) const = default;
-    };   // ==
-    struct PlusPlus {
-        auto operator<=>(const PlusPlus&) const = default;
-    };   // ++
-    struct MinusMinus {
-        auto operator<=>(const MinusMinus&) const = default;
-    };   // --
     struct Identifier {
-        auto operator<=>(const Identifier&) const = default;
         std::string value;
     };
     struct String {
-        auto operator<=>(const String&) const = default;
         std::string value;
     };
     struct Integer {
-        auto operator<=>(const Integer&) const = default;
         int32_t value;
     };
 
-using Any = std::variant<
+    using Any = std::variant<
     Keyword, LPar, RPar, Equal, Equal2, LCurlyBracket, RCurlyBracket, Semicolon, Comma, Plus, Minus, Asterisk, Slash, Identifier,
     Integer, String,LSquareBracket,RSquareBracket,LAngleBracket,RAngleBracket,LAngleBracketEqual,RAngleBracketEqual,PlusPlus,MinusMinus,
-    NoEqual,Char,Dot>;
+    NoEqual,Char,Dot,Percent>;
 
-    using CODE = std::vector<std::pair<Any,std::pair<int,int>>>;
+    using CODE = std::vector<std::pair<Any,std::pair<unsigned int,unsigned short>>>;
 
     inline std::string TokenToString(const Any& token) {
         return std::visit(
@@ -138,6 +91,7 @@ using Any = std::variant<
                 [](Minus)-> std::string  { return "-"; },
                 [](Asterisk)-> std::string  { return "*"; },
                 [](Slash)-> std::string  { return "/"; },
+                [](Percent)-> std::string  { return "%"; },
                 [](Comma)-> std::string  { return ","; },
                 [](Dot)-> std::string  { return "."; },
                 [](Equal)-> std::string  { return "="; },
@@ -156,5 +110,15 @@ using Any = std::variant<
                 [](auto&&) { return "unknown token"; },
             },
             token);
+    }
+
+    inline bool operator==(const Any& a,const Any& b) {
+        return a.index() == b.index();
+    }
+    inline bool operator<(const Any& a,const Any& b) {
+        return a.index() < b.index();
+    }
+    inline bool operator>(const Any& a,const Any& b) {
+        return a.index() > b.index();
     }
 }

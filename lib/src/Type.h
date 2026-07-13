@@ -1,0 +1,108 @@
+#pragma once
+#include <map>
+#include <string>
+#include <vector>
+
+#include "token.h"
+
+namespace qlang{
+	struct BinaryOperator;
+	struct Variable;
+
+	struct  Type {
+		const std::string type;
+		std::vector<Variable*> Fields;
+		std::map<std::string,BinaryOperator*> operators;
+	};
+
+	struct TypeComparator {
+		bool operator()(const Type& a, const Type& b) const {
+			const unsigned int as = a.type.size();
+			const unsigned int bs = b.type.size();
+
+			if(as != bs) {
+				return as > bs;
+			}
+			for (unsigned int i = 0;i < as;i++) {
+				if (static_cast<int>(a.type[i]) != static_cast<int>(b.type[i])) {
+					return static_cast<int>(a.type[i]) > static_cast<int>(b.type[i]);
+				}
+			}
+			return false;
+		}
+		bool operator()(const Type* a, const Type* b) const {
+			const unsigned int as = a->type.size();
+			const unsigned int bs = b->type.size();
+
+			if(as != bs) {
+				return as > bs;
+			}
+			for (unsigned int i = 0;i < as;i++) {
+				if (static_cast<int>(a->type[i]) != static_cast<int>(b->type[i])) {
+					return static_cast<int>(a->type[i]) > static_cast<int>(b->type[i]);
+				}
+			}
+			return false;
+		}
+		bool operator()(const std::vector<const Type*>& a, const std::vector<const Type*>& b) const {
+			const unsigned int as = a.size();
+			const unsigned int bs = b.size();
+
+			if(as != bs) {
+				return as > bs;
+			}
+			for (unsigned int i = 0;i < as;i++) {
+				if (!operator()(a[i],b[i]) && !operator()(b[i],a[i])) {
+					continue;
+				}
+				return operator()(a[i],b[i]);
+			}
+			return false;
+		}
+	};
+
+	struct SpecificFunction {
+		const std::string name;
+		std::pair<std::vector<const Type*>,const Type*> TypeFunc;
+	};
+
+	struct Function {
+		const std::string name;
+		std::map<std::vector<const Type*>,const Type*,TypeComparator> TypeFunc;
+		SpecificFunction operator[](const std::vector<const Type*>& input) const {
+			SpecificFunction res{.name = name};
+			res.TypeFunc = std::make_pair(input,TypeFunc.find(input)->second);
+			return res;
+		}
+	};
+
+	struct  Variable {
+		const std::string name;
+		const Type* type;
+		SpecificFunction ParentFunc;
+	};
+
+	struct BinaryOperator {
+		std::map<const Type*,const Type*,TypeComparator> TypeOper;
+		std::map<const Type*,std::string,TypeComparator> asmCode;
+	};
+
+	struct Value {
+		std::string code;
+		const Type* type;
+	};
+
+	inline std::map<token::Any,int> operatorsPower = {
+		{token::Equal2{},1},
+		{token::NoEqual{},1},
+		{token::LAngleBracket{},1},
+		{token::RAngleBracket{},1},
+		{token::LAngleBracketEqual{},1},
+		{token::RAngleBracketEqual{},1},
+		{token::Plus{},2},
+		{token::Minus{},2},
+		{token::Asterisk{},3},
+		{token::Slash{},3},
+		{token::Percent{},3},
+	};
+}

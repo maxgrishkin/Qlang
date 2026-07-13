@@ -28,6 +28,7 @@ TEST(LexerTest,Case1) {
 		std::make_pair(qlang::token::Minus{},std::make_pair(1,1)),
 		std::make_pair(qlang::token::Asterisk{},std::make_pair(1,1)),
 		std::make_pair(qlang::token::Slash{},std::make_pair(1,1)),
+		std::make_pair(qlang::token::Percent{},std::make_pair(1,1)),
 		std::make_pair(qlang::token::Comma{},std::make_pair(1,1)),
 		std::make_pair(qlang::token::Dot{},std::make_pair(1,1)),
 		std::make_pair(qlang::token::Equal{},std::make_pair(1,1)),
@@ -45,7 +46,7 @@ TEST(LexerTest,Case1) {
 		std::make_pair(qlang::token::Char{.value = '\''},std::make_pair(1,1)),
 		std::make_pair(qlang::token::Char{.value = 'g'},std::make_pair(1,1))
 	};
-	std::string code = R"(fn return if for while foreach in break continue else(){}[]<><=>=;+-*/,.=!===++--aboba 123 "\r\t\n\\\" fsdfsdf4343" '\r' '\t' '\n' '\\' '\'' 'g')";
+	std::string code = R"(fn return if for while foreach in break continue else(){}[]<><=>=;+-*/%,. = != ==++--aboba 123 "\r\t\n\\\" fsdfsdf4343" '\r' '\t' '\n' '\\' '\'' 'g')";
 	qlang::token::CODE code_lex = qlang::Lexer::Lex(code);
 	for (int i = 0;i<expected.size();i++) {
 		EXPECT_EQ(code_lex[i].first,expected[i].first);

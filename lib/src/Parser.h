@@ -9,12 +9,12 @@ namespace qlang{
 		Value ParseExpression(token::CODE& code, int left_binding_power) const;
 	public:
 		explicit Parser(const Compiler* compiler) : compiler(compiler) {}
-		[[nodiscard]] Value ParseExpression(token::CODE code) const {
+		[[nodiscard]] Value ParseExpression(token::CODE& code) const {
 			return ParseExpression(code, 0);
 		}
 
 		static std::string FuncToManglingName(const SpecificFunction& Func) {
-			std::string res;
+			std::string res = "_";
 			for (const auto* type : Func.TypeFunc.first) {
 				res += std::to_string(type->type.size()) + '_' + type->type;
 			}
@@ -24,7 +24,7 @@ namespace qlang{
 		static std::string VarToManglingName(const Variable& var) {
 			std::string res = FuncToManglingName(var.ParentFunc);
 
-			res += std::to_string(var.name.size()) + '_' + var.name;
+			res += '_' + std::to_string(var.name.size()) + var.name;
 			return res;
 		}
 

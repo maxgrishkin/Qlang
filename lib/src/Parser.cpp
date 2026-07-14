@@ -5,7 +5,6 @@
 
 qlang::Value qlang::Parser::ParseExpression(token::CODE& code, int left_binding_power) const {
 	int right_binding_power = 0;
-	bool breaker = false;
 	auto Element = [&code, this](const int rbp) -> Value {
 		return std::visit(match(
 			[&](auto&&) -> Value {
@@ -54,9 +53,8 @@ qlang::Value qlang::Parser::ParseExpression(token::CODE& code, int left_binding_
 		resStr += op->second->asmCode[val.type];
 		return Value{.code = resStr, .type = typeOper->second->TypeOper.at(val.type)};
 	};
-	auto Operator = [&code, this, &breaker, generateBinaryOperator](const Type* lType, const int rbp, const int lbp) -> Value {
+	auto Operator = [&code, generateBinaryOperator](const Type* lType, const int rbp, const int lbp) -> Value {
 		if (lbp > rbp) {
-			breaker = true;
 			return Value{.code = "",.type = nullptr};
 		}
 		return std::visit(match(
@@ -64,7 +62,6 @@ qlang::Value qlang::Parser::ParseExpression(token::CODE& code, int left_binding_
 			throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second));
 		},
 		[&](token::Semicolon) -> Value {
-			breaker = true;
 			return Value{.code = "", .type = nullptr};
 		},
 		[&](token::Plus) -> Value {
@@ -84,7 +81,6 @@ qlang::Value qlang::Parser::ParseExpression(token::CODE& code, int left_binding_
 		},
 		[&](token::RPar) -> Value {
 			code.erase(code.begin());
-			breaker = true;
 			return Value{.code = "", .type = nullptr};
 		}
 		),code[0].first);
@@ -103,8 +99,6 @@ qlang::Value qlang::Parser::ParseExpression(token::CODE& code, int left_binding_
 				break;
 			ASMCode += op.code;
 			type = op.type;
-			if (breaker)
-				break;
 		}
 	}
 
@@ -117,14 +111,14 @@ qlang::Value qlang::Parser::VariableReference(token::CODE &code) const {
 		[&](auto&&) -> std::string {
 			return ""; //this variant not exist
 		},
-		[&](const token::Identifier& identifier) -> std::string {
+		[&](token::Identifier identifier) -> std::string {
 			code.erase(code.begin());
 			return identifier.value;
 		}
 		), code[0].first
 	);
 	const Variable var = compiler->getVariables().at(name);
-	return Value{.code = "mov rax, " + VarToManglingName(var) + "\n", .type = var.type};
+	return Value{.code = "mov rax, [" + VarToManglingName(var) + "]\n", .type = var.type};
 }
 
 qlang::Value qlang::Parser::FunctionCall(token::CODE &code) const {

@@ -69,6 +69,7 @@ namespace qlang{
 	struct Function {
 		const std::string name;
 		std::map<std::vector<const Type*>,const Type*,TypeComparator> TypeFunc;
+
 		SpecificFunction operator[](const std::vector<const Type*>& input) const {
 			SpecificFunction res{.name = name};
 			res.TypeFunc = std::make_pair(input,TypeFunc.find(input)->second);
@@ -90,6 +91,11 @@ namespace qlang{
 	struct Value {
 		std::string code;
 		const Type* type;
+	};
+
+	struct SectionsCode {
+		std::string code;
+		std::string data;
 	};
 
 	inline std::map<token::Any,int> operatorsPower = {

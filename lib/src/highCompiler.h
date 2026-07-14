@@ -39,10 +39,17 @@ namespace qlang {
 			};
 
 			Types["int"].operators = intOperators;
+
+			//TODO ubrat kostil
+			Function Main{.name = "main"};
+			std::map<std::vector<const Type*>,const Type*,TypeComparator> TypeFunc;
+			std::vector<const Type*> inputMain = {};
+			TypeFunc.emplace(inputMain,&Types.at("int"));
+			Functions.emplace("main",Main);
 		}
 
-		Compiler newCompiler() {
-			Compiler compiler = Compiler(Types,Functions,Variables,Functions["main"][{}]);
+		Compiler newCompiler(const std::string& nameFunc) const {
+			Compiler compiler = Compiler(Types,Functions,Variables,Functions.at(nameFunc)[{}]);
 			return compiler;
 		}
 

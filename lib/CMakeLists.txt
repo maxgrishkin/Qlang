@@ -50,7 +50,8 @@ if(BUILD_TESTS)
     )
 
     # Создаем исполняемый файл для тестов
-    add_executable(qlang_test ${TEST_SOURCES})
+    add_executable(qlang_test ${TEST_SOURCES}
+            test/CompilerTest.cpp)
 
     # Линкуем библиотеки для тестов
     target_link_libraries(qlang_test PRIVATE

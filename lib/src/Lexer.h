@@ -287,6 +287,7 @@ namespace qlang::Lexer{
 						i--;
 						static const std::map<std::string,token::Keyword> Keywords = {
 							{"fn",token::Keyword::FN},
+							{"var",token::Keyword::VAR},
 							{"return",token::Keyword::RETURN},
 							{"if",token::Keyword::IF},
 							{"for",token::Keyword::FOR},

@@ -9,6 +9,7 @@
 namespace qlang::token {
     enum class Keyword {
         FN,
+        VAR,
         RETURN,
         IF,
         FOR,
@@ -68,6 +69,7 @@ namespace qlang::token {
                 [](Keyword kw) -> std::string {
                     switch (kw) {
                         case Keyword::FN: return "fn";
+                        case Keyword::VAR: return "var";
                         case Keyword::RETURN: return "return";
                         case Keyword::IF: return "if";
                         case Keyword::ELSE: return "else";

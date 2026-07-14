@@ -141,6 +141,67 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 					res.code += ".no_if_label" + std::to_string(countIf - 1) + ":\n";
 					break;
 				}
+				case token::Keyword::WHILE: {
+					++countIf;
+					if (!std::holds_alternative<token::LPar>(code[0].first)) {
+						throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected LPar");
+					}
+					code.erase(code.begin());
+					token::CODE ifExpression;
+					std::pair<unsigned int,unsigned int> position;
+					unsigned int levelBracket = 0;
+					for (;;) {
+						if (std::holds_alternative<token::RPar>(code[0].first)) {
+							if (levelBracket == 0) {
+								position = code[0].second;
+								break;
+							}
+							--levelBracket;
+						}
+						if (std::holds_alternative<token::LPar>(code[0].first) ||
+							std::holds_alternative<token::LCurlyBracket>(code[0].first) ||
+							std::holds_alternative<token::LSquareBracket>(code[0].first))
+						{
+							++levelBracket;
+						}
+						if (std::holds_alternative<token::RCurlyBracket>(code[0].first) ||
+							std::holds_alternative<token::RSquareBracket>(code[0].first))
+						{
+							--levelBracket;
+						}
+						ifExpression.push_back(code[0]);
+						code.erase(code.begin());
+					}
+					code.erase(code.begin());
+					ifExpression.push_back(std::make_pair(token::Semicolon {},position));
+
+					Parser parser(this);
+
+					Value val = parser.ParseExpression(ifExpression);
+					if (val.type->type != "bool") {
+						throw std::runtime_error("Unexpected type while expression, at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + " expected bool");
+					}
+					if (!std::holds_alternative<token::LCurlyBracket>(code[0].first)) {
+						throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected LCurlyBracket");
+					}
+					code.erase(code.begin());
+					Compiler whileCompiler(Types,Functions,Variables,ParentFunc,countIf);
+					SectionsCode whileSectionsCode = whileCompiler.Compiling(code);
+					res.data += whileSectionsCode.data;
+
+					res.code += val.code;
+					res.code += "cmp rax, 1\n";
+					res.code += "jnz .no_while_label" + std::to_string(countIf - 1) + '\n';
+
+					res.code += ".while_label" + std::to_string(countIf - 1) + ":\n";
+					res.code += whileSectionsCode.code;
+
+					res.code += val.code;
+					res.code += "cmp rax, 1\n";
+					res.code += "jz .while_label" + std::to_string(countIf - 1) + '\n';
+					res.code += ".no_while_label" + std::to_string(countIf - 1) + ":\n";
+					break;
+				}
 				default:
 					throw std::runtime_error("Unexpected keyword: " + token::TokenToString(keyword) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second));
 			}

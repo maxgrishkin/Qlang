@@ -36,13 +36,9 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="577a4689-4f42-479e-b873-79834eb29ecc" name="Changes" comment="add variable assignment">
+    <list default="true" id="577a4689-4f42-479e-b873-79834eb29ecc" name="Changes" comment="add if statement">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/Compiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/Compiler.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/Compiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/Compiler.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/Parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/Parser.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/Type.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/Type.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/highCompiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/highCompiler.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/test/CompilerTest.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lib/test/CompilerTest.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/test/TestASM.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/test/TestASM.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
@@ -956,7 +952,7 @@
       <workItem from="1783395804469" duration="20000" />
       <workItem from="1783594497357" duration="1120000" />
       <workItem from="1783953432804" duration="16555000" />
-      <workItem from="1784015218311" duration="22671000" />
+      <workItem from="1784015218311" duration="24068000" />
     </task>
     <task id="LOCAL-00001" summary="Lexer">
       <option name="closed" value="true" />
@@ -990,7 +986,15 @@
       <option name="project" value="LOCAL" />
       <updated>1784023354451</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="add if statement">
+      <option name="closed" value="true" />
+      <created>1784045458495</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1784045458495</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1029,7 +1033,8 @@
     <MESSAGE value="add comments" />
     <MESSAGE value="add parsing primary expression" />
     <MESSAGE value="add variable assignment" />
-    <option name="LAST_COMMIT_MESSAGE" value="add variable assignment" />
+    <MESSAGE value="add if statement" />
+    <option name="LAST_COMMIT_MESSAGE" value="add if statement" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1063,11 +1068,6 @@
           <url>file://$PROJECT_DIR$/lib/src/Parser.cpp</url>
           <line>40</line>
           <option name="timeStamp" value="43" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/lib/src/Parser.cpp</url>
-          <line>122</line>
-          <option name="timeStamp" value="44" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

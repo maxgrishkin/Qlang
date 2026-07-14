@@ -101,3 +101,19 @@ TEST(CompilerTest, Case6) {
 	CodeSection += parser.ParseExpression(ParserCode).code;
 	EXPECT_EQ(TestExpressionWithData(CodeSection,DataSection),123);
 }
+
+TEST(CompilerTest, Case7) {
+	qlang::token::CODE CompilerCode = qlang::Lexer::Lex("var int aboba = 1; var int aboba2 = 0; while (aboba <= 20) { aboba2 = aboba + aboba2; aboba = aboba + 1; } }");
+	qlang::token::CODE ParserCode = qlang::Lexer::Lex("aboba2;");
+
+	std::string CodeSection;
+	std::string DataSection;
+	qlang::highCompiler hc;
+	qlang::Compiler compiler = hc.newCompiler("main");
+	qlang::SectionsCode sections_code = compiler.Compiling(CompilerCode);
+	CodeSection += sections_code.code;
+	DataSection += sections_code.data;
+	qlang::Parser parser(&compiler);
+	CodeSection += parser.ParseExpression(ParserCode).code;
+	EXPECT_EQ(TestExpressionWithData(CodeSection,DataSection),210);
+}

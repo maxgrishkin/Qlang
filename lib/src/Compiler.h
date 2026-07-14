@@ -12,13 +12,17 @@ namespace qlang{
 		std::map<const std::string,Function> Functions;
 		std::map<const std::string,Variable> Variables;
 		SpecificFunction ParentFunc;
+		unsigned int& countIf;
 	public:
 
 		Compiler(const std::map<const std::string,Type> &Types,
 		const std::map<const std::string,Function> &Functions,
 		const std::map<const std::string,Variable> &Variables,
-		SpecificFunction ParentFunc) :
-		Types(Types), Functions(Functions), Variables(Variables), ParentFunc(std::move(ParentFunc)) {}
+		SpecificFunction ParentFunc,
+		unsigned int& countIf) :
+		Types(Types), Functions(Functions), Variables(Variables), ParentFunc(std::move(ParentFunc)), countIf(countIf) {}
+
+		Compiler() = delete;
 
 		SectionsCode Compiling(token::CODE& code);
 

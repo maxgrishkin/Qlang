@@ -1,10 +1,12 @@
+#include <iostream>
+
 #include "highCompiler.h"
 #include "Lexer.h"
 #include "Parser.h"
 #include "lib/test/TestASM.h"
 
 int main() {
-	qlang::token::CODE CompilerCode = qlang::Lexer::Lex("var int aboba = 123 + 321 / 3; }");
+	qlang::token::CODE CompilerCode = qlang::Lexer::Lex("var int aboba = 123; if (123 < 321) { aboba = aboba + 321 / 3; } }");
 	qlang::token::CODE ParserCode = qlang::Lexer::Lex("aboba;");
 
 	std::string CodeSection;

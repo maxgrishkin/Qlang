@@ -81,6 +81,7 @@ namespace qlang{
 		const std::string name;
 		const Type* type;
 		SpecificFunction ParentFunc;
+		bool initialize = false;
 	};
 
 	struct BinaryOperator {

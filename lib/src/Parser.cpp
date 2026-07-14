@@ -79,6 +79,24 @@ qlang::Value qlang::Parser::ParseExpression(token::CODE& code, int left_binding_
 		[&](token::Percent) -> Value {
 			return generateBinaryOperator(lType, "%", true, rbp);
 		},
+		[&](token::Equal) -> Value {
+			return generateBinaryOperator(lType, "==", true, rbp);
+		},
+		[&](token::NoEqual) -> Value {
+			return generateBinaryOperator(lType, "!=", true, rbp);
+		},
+		[&](token::LAngleBracket) -> Value {
+			return generateBinaryOperator(lType, "<", true, rbp);
+		},
+		[&](token::RAngleBracket) -> Value {
+			return generateBinaryOperator(lType, ">", true, rbp);
+		},
+		[&](token::LAngleBracketEqual) -> Value {
+			return generateBinaryOperator(lType, "<=", true, rbp);
+		},
+		[&](token::RAngleBracketEqual) -> Value {
+			return generateBinaryOperator(lType, ">=", true, rbp);
+		},
 		[&](token::RPar) -> Value {
 			code.erase(code.begin());
 			return Value{.code = "", .type = nullptr};
@@ -118,7 +136,10 @@ qlang::Value qlang::Parser::VariableReference(token::CODE &code) const {
 		), code[0].first
 	);
 	const Variable var = compiler->getVariables().at(name);
-	return Value{.code = "mov rax, [" + VarToManglingName(var) + "]\n", .type = var.type};
+	if (!var.initialize) {
+		throw std::runtime_error("Use not initialize variable (you invalid), at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second));
+	}
+	return Value{.code = "mov rax, qword [" + VarToManglingName(var) + "]\n", .type = var.type};
 }
 
 qlang::Value qlang::Parser::FunctionCall(token::CODE &code) const {

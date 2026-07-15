@@ -11,9 +11,18 @@ namespace qlang{
 		std::map<const std::string,Type> Types;
 		std::map<const std::string,Function> Functions;
 		std::map<const std::string,Variable> Variables;
+		std::vector<std::string> PseudoVariables; //deleted variable
 		SpecificFunction ParentFunc;
 		unsigned int& countIf;
 	public:
+
+		Compiler(const std::map<const std::string,Type> &Types,
+		const std::map<const std::string,Function> &Functions,
+		const std::map<const std::string,Variable> &Variables,
+		const std::vector<std::string> &PseudoVariables,
+		SpecificFunction ParentFunc,
+		unsigned int& countIf) :
+		Types(Types), Functions(Functions), Variables(Variables), PseudoVariables(PseudoVariables), ParentFunc(std::move(ParentFunc)), countIf(countIf) {}
 
 		Compiler(const std::map<const std::string,Type> &Types,
 		const std::map<const std::string,Function> &Functions,
@@ -25,6 +34,9 @@ namespace qlang{
 		Compiler() = delete;
 
 		SectionsCode Compiling(token::CODE& code);
+		SectionsCode VariableDefinition(token::CODE& code);
+		SectionsCode VariableAssignment(token::CODE& code);
+		void DeleteVariable(const std::string& name);
 
 		[[nodiscard]] const std::map<const std::string, Type>& getTypes() const {
 			return Types;
@@ -33,7 +45,10 @@ namespace qlang{
 			return Functions;
 		}
 		[[nodiscard]] const std::map<const std::string,Variable>& getVariables() const {
-			return  Variables;
+			return Variables;
+		}
+		[[nodiscard]] const std::vector<std::string>& getPseudoVariables() const {
+			return PseudoVariables;
 		}
 
 		const Type* take_type(token::CODE& code) const {

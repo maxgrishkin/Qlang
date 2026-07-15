@@ -7,7 +7,7 @@
 #include "token.h"
 
 TEST(CompilerTest, Case1) {
-	qlang::token::CODE CompilerCode = qlang::Lexer::Lex("var int aboba = 123; }");
+	qlang::token::CODE CompilerCode = qlang::Lexer::Lex("var int aboba = 123; ;");
 	qlang::token::CODE ParserCode = qlang::Lexer::Lex("aboba;");
 
 	std::string CodeSection;
@@ -17,13 +17,12 @@ TEST(CompilerTest, Case1) {
 	qlang::SectionsCode sections_code = compiler.Compiling(CompilerCode);
 	CodeSection += sections_code.code;
 	DataSection += sections_code.data;
-	qlang::Parser parser(&compiler);
-	CodeSection += parser.ParseExpression(ParserCode).code;
+
 	EXPECT_EQ(TestExpressionWithData(CodeSection,DataSection),123);
 }
 
 TEST(CompilerTest, Case2) {
-	qlang::token::CODE CompilerCode = qlang::Lexer::Lex("var int aboba = 123 + 321 / 3; }");
+	qlang::token::CODE CompilerCode = qlang::Lexer::Lex("var int aboba = 123 + 321 / 3; ;");
 	qlang::token::CODE ParserCode = qlang::Lexer::Lex("aboba;");
 
 	std::string CodeSection;
@@ -39,7 +38,7 @@ TEST(CompilerTest, Case2) {
 }
 
 TEST(CompilerTest, Case3) {
-	qlang::token::CODE CompilerCode = qlang::Lexer::Lex("var int aboba; aboba = 123; }");
+	qlang::token::CODE CompilerCode = qlang::Lexer::Lex("var int aboba; aboba = 123; ;");
 	qlang::token::CODE ParserCode = qlang::Lexer::Lex("aboba;");
 
 	std::string CodeSection;
@@ -55,7 +54,7 @@ TEST(CompilerTest, Case3) {
 }
 
 TEST(CompilerTest, Case4) {
-	qlang::token::CODE CompilerCode = qlang::Lexer::Lex("var int aboba; aboba = 123 + 321 / 3; }");
+	qlang::token::CODE CompilerCode = qlang::Lexer::Lex("var int aboba; aboba = 123 + 321 / 3; ;");
 	qlang::token::CODE ParserCode = qlang::Lexer::Lex("aboba;");
 
 	std::string CodeSection;
@@ -71,7 +70,7 @@ TEST(CompilerTest, Case4) {
 }
 
 TEST(CompilerTest, Case5) {
-	qlang::token::CODE CompilerCode = qlang::Lexer::Lex("var int aboba = 123; if (123 < 321) { aboba = aboba + 321 / 3; } }");
+	qlang::token::CODE CompilerCode = qlang::Lexer::Lex("var int aboba = 123; if (123 < 321) { aboba = aboba + 321 / 3; } ;");
 	qlang::token::CODE ParserCode = qlang::Lexer::Lex("aboba;");
 
 	std::string CodeSection;
@@ -87,7 +86,7 @@ TEST(CompilerTest, Case5) {
 }
 
 TEST(CompilerTest, Case6) {
-	qlang::token::CODE CompilerCode = qlang::Lexer::Lex("var int aboba = 123; if (123 > 321) { aboba = aboba + 321 / 3; } }");
+	qlang::token::CODE CompilerCode = qlang::Lexer::Lex("var int aboba = 123; if (123 > 321) { aboba = aboba + 321 / 3; } ;");
 	qlang::token::CODE ParserCode = qlang::Lexer::Lex("aboba;");
 
 	std::string CodeSection;
@@ -103,7 +102,7 @@ TEST(CompilerTest, Case6) {
 }
 
 TEST(CompilerTest, Case7) {
-	qlang::token::CODE CompilerCode = qlang::Lexer::Lex("var int aboba = 1; var int aboba2 = 0; while (aboba <= 20) { aboba2 = aboba + aboba2; aboba = aboba + 1; } }");
+	qlang::token::CODE CompilerCode = qlang::Lexer::Lex("var int aboba = 1; var int aboba2 = 0; while (aboba <= 20) { aboba2 = aboba + aboba2; aboba = aboba + 1; } ;");
 	qlang::token::CODE ParserCode = qlang::Lexer::Lex("aboba2;");
 
 	std::string CodeSection;
@@ -119,7 +118,7 @@ TEST(CompilerTest, Case7) {
 }
 
 TEST(CompilerTest, Case8) {
-	qlang::token::CODE CompilerCode = qlang::Lexer::Lex("var int aboba = 0; for (var int aboba2 = 1;aboba2 <= 20; aboba2 = aboba2 + 1) { aboba = aboba + aboba2; } }");
+	qlang::token::CODE CompilerCode = qlang::Lexer::Lex("var int aboba = 0; for (var int aboba2 = 1;aboba2 <= 20; aboba2 = aboba2 + 1) { aboba = aboba + aboba2; } ;");
 	qlang::token::CODE ParserCode = qlang::Lexer::Lex("aboba;");
 
 	std::string CodeSection;

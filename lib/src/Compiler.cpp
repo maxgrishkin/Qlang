@@ -1,5 +1,6 @@
 #include "Compiler.h"
 
+#include <algorithm>
 #include <stdexcept>
 #include "Parser.h"
 
@@ -12,80 +13,46 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 		[code](auto&& a)  {
 			throw std::runtime_error("Unexpected token: " + token::TokenToString(a) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second));
 		},
-		[&code, &breaker](token::RCurlyBracket)  {
+		[&code, &breaker, this](token::RCurlyBracket)  {
+			code.erase(code.begin());
+			std::vector<std::string> varsNames;
+			varsNames.reserve(Variables.size());
+			for (const auto& var : Variables) {
+				varsNames.push_back(var.first);
+			}
+			for (const auto& var : varsNames) {
+				DeleteVariable(var);
+			}
+			breaker = true;
+		},
+		[&code, &breaker](token::Semicolon)  {
 			code.erase(code.begin());
 			breaker = true;
 		},
-		[&code, this, &res](token::Identifier identifier)  {
+		[&code, this, &res](token::Identifier)  {
 			if (std::holds_alternative<token::LPar>(code[1].first)) {
 				//function call
 				const Parser parser(this);
 				res.code += parser.FunctionCall(code).code;
+				if (!std::holds_alternative<token::Semicolon>(code[0].first)) {
+					throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected Semicolon");
+				}
+				code.erase(code.begin());
 				return;
 			}
 			//variable definition
-			std::string varName = std::get<token::Identifier>(code[0].first).value;
-			code.erase(code.begin());
-			if (!std::holds_alternative<token::Equal>(code[0].first)) {
-				throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected Equal");
-			}
-			code.erase(code.begin());
-			const Parser parser(this);
-			Value val = parser.ParseExpression(code);
-			if (Variables[varName].type->type != val.type->type) {
-				throw std::runtime_error("Unexpected variable value type: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected: " + Variables[varName].type->type);
-			}
-			if (!std::holds_alternative<token::Semicolon>(code[0].first)) { //next token must be a Semicolon
-				throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected Semicolon");
-			}
-			code.erase(code.begin());
-			res.code += val.code;
-			res.code += "mov [" + Parser::VarToManglingName(Variables[varName]) + "], rax\n";
-			Variables[varName].initialize = true;
+			SectionsCode var = VariableDefinition(code);
+			res.code += var.code;
+			res.data += var.data;
 		},
 		[&code, this, &res](token::Keyword keyword) {
 			code.erase(code.begin());
 			switch(keyword) {
 				case token::Keyword::VAR: {
-					//next token(s) must be a type
-					if (!std::holds_alternative<token::Identifier>(code[0].first)) {
-						throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected Identifier");
-					}
-					const Type* typeVar = take_type(code);
-
-					//next token must be a name
-					if (!std::holds_alternative<token::Identifier>(code[0].first)) {
-						throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected Identifier");
-					}
-					Variable var{.name = std::get<token::Identifier>(code[0].first).value, .type = typeVar, .ParentFunc = ParentFunc};
-					code.erase(code.begin()); //delete Identifier
-					const std::string nameVar = Parser::VarToManglingName(var);
-
-					res.data += nameVar + " resq 1\n";
-					Variables.emplace(var.name, var);
-
-					if (std::holds_alternative<token::Equal>(code[0].first)) {
-						code.erase(code.begin());
-						const Parser parser(this);
-						Value val = parser.ParseExpression(code);
-						if (typeVar->type != val.type->type) {
-							throw std::runtime_error("Unexpected variable value type: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected: " + typeVar->type);
-						}
-						if (!std::holds_alternative<token::Semicolon>(code[0].first)) { //next token must be a Semicolon
-							throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected Semicolon");
-						}
-						code.erase(code.begin());
-						res.code += val.code;
-						res.code += "mov [" + nameVar + "], rax\n";
-						Variables[var.name].initialize = true;
-						break;
-					}
-					if (std::holds_alternative<token::Semicolon>(code[0].first)) {
-						code.erase(code.begin());
-						Variables[var.name].initialize = false;
-						break;
-					}
-					throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second));
+					SectionsCode var = VariableAssignment(code);
+					res.code += var.code;
+					res.data += var.data;
+					break;
 				}
 				case token::Keyword::IF: {
 					++countIf;
@@ -119,7 +86,7 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 						code.erase(code.begin());
 					}
 					code.erase(code.begin());
-					ifExpression.push_back(std::make_pair(token::Semicolon {},position));
+					ifExpression.emplace_back(token::Semicolon {},position);
 
 					Parser parser(this);
 
@@ -131,7 +98,7 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 						throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected LCurlyBracket");
 					}
 					code.erase(code.begin());
-					Compiler ifCompiler(Types,Functions,Variables,ParentFunc,countIf);
+					Compiler ifCompiler(Types,Functions,Variables,PseudoVariables,ParentFunc,countIf);
 					SectionsCode ifSectionsCode = ifCompiler.Compiling(code);
 					res.data += ifSectionsCode.data;
 					res.code += val.code;
@@ -171,7 +138,7 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 						code.erase(code.begin());
 					}
 					code.erase(code.begin());
-					ifExpression.push_back(std::make_pair(token::Semicolon {},position));
+					ifExpression.emplace_back(token::Semicolon {},position);
 
 					Parser parser(this);
 
@@ -183,7 +150,7 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 						throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected LCurlyBracket");
 					}
 					code.erase(code.begin());
-					Compiler whileCompiler(Types,Functions,Variables,ParentFunc,countIf);
+					Compiler whileCompiler(Types,Functions,Variables,PseudoVariables,ParentFunc,countIf);
 					SectionsCode whileSectionsCode = whileCompiler.Compiling(code);
 					res.data += whileSectionsCode.data;
 
@@ -230,9 +197,18 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 						code.erase(code.begin());
 					}
 					code.erase(code.begin());
-					varExpression.push_back(std::make_pair(token::Semicolon {},position));
-					varExpression.push_back(std::make_pair(token::RCurlyBracket {},position));
-					SectionsCode varSections = Compiling(varExpression);
+					varExpression.emplace_back(token::Semicolon {},position);
+					varExpression.emplace_back(token::Semicolon {},position);
+
+					if (!std::holds_alternative<token::Keyword>(varExpression[0].first)) {
+						throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected Keyword:VAR");
+					}
+					if (std::get<token::Keyword>(varExpression[0].first) != token::Keyword::VAR) {
+						throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected Keyword:VAR");
+					}
+					varExpression.erase(varExpression.begin());
+
+					SectionsCode varSections = VariableAssignment(varExpression);
 					res.data += varSections.data;
 					res.code += varSections.code;
 
@@ -286,8 +262,8 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 						actionExpression.push_back(code[0]);
 						code.erase(code.begin());
 					}
-					actionExpression.push_back(std::make_pair(token::Semicolon {},position));
-					actionExpression.push_back(std::make_pair(token::RCurlyBracket {},position));
+					actionExpression.emplace_back(token::Semicolon {},position);
+					actionExpression.emplace_back(token::Semicolon {},position);
 					SectionsCode actionSectionsCode = Compiling(actionExpression);
 					res.data += actionSectionsCode.data;
 
@@ -300,7 +276,7 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 					}
 					code.erase(code.begin());
 
-					Compiler forCompiler(Types,Functions,Variables,ParentFunc,countIf);
+					Compiler forCompiler(Types,Functions,Variables,PseudoVariables,ParentFunc,countIf);
 					SectionsCode forSectionsCode = forCompiler.Compiling(code);
 					res.data += forSectionsCode.data;
 
@@ -328,4 +304,83 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 	}
 
 	return res;
+}
+
+qlang::SectionsCode qlang::Compiler::VariableDefinition(token::CODE &code) {
+	SectionsCode res{.code = "", .data = ""};
+	std::string varName = std::get<token::Identifier>(code[0].first).value;
+	code.erase(code.begin());
+	if (!std::holds_alternative<token::Equal>(code[0].first)) {
+		throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected Equal");
+	}
+	code.erase(code.begin());
+	const Parser parser(this);
+	Value val = parser.ParseExpression(code);
+	if (Variables[varName].type->type != val.type->type) {
+		throw std::runtime_error("Unexpected variable value type: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected: " + Variables[varName].type->type);
+	}
+	if (!std::holds_alternative<token::Semicolon>(code[0].first)) { //next token must be a Semicolon
+		throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected Semicolon");
+	}
+	code.erase(code.begin());
+	res.code += val.code;
+	res.code += "mov [" + Parser::VarToManglingName(Variables[varName]) + "], rax\n";
+	Variables[varName].initialize = true;
+	return res;
+}
+
+qlang::SectionsCode qlang::Compiler::VariableAssignment(token::CODE &code) {
+	SectionsCode res{.code = "", .data = ""};
+
+	//next token(s) must be a type
+	if (!std::holds_alternative<token::Identifier>(code[0].first)) {
+		throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected Identifier");
+	}
+	const Type* typeVar = take_type(code);
+
+	//next token must be a name
+	if (!std::holds_alternative<token::Identifier>(code[0].first)) {
+		throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected Identifier");
+	}
+	Variable var{.name = std::get<token::Identifier>(code[0].first).value, .type = typeVar, .ParentFunc = ParentFunc};
+	code.erase(code.begin()); //delete Identifier
+	const std::string nameVar = Parser::VarToManglingName(var);
+
+	if (std::find(PseudoVariables.begin(),PseudoVariables.end(),nameVar) == PseudoVariables.end()) {
+		res.data += nameVar + " resq 1\n";
+	}
+	else {
+		PseudoVariables.erase(std::remove(PseudoVariables.begin(), PseudoVariables.end(), nameVar), PseudoVariables.end());
+	}
+
+	Variables.emplace(var.name, var);
+	PseudoVariables.push_back(var.name);
+
+	if (std::holds_alternative<token::Equal>(code[0].first)) {
+		code.erase(code.begin());
+		const Parser parser(this);
+		Value val = parser.ParseExpression(code);
+		if (typeVar->type != val.type->type) {
+			throw std::runtime_error("Unexpected variable value type: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected: " + typeVar->type);
+		}
+		if (!std::holds_alternative<token::Semicolon>(code[0].first)) { //next token must be a Semicolon
+			throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected Semicolon");
+		}
+		code.erase(code.begin());
+		res.code += val.code;
+		res.code += "mov [" + nameVar + "], rax\n";
+		Variables[var.name].initialize = true;
+		return res;
+	}
+	if (std::holds_alternative<token::Semicolon>(code[0].first)) {
+		code.erase(code.begin());
+		Variables[var.name].initialize = false;
+		return res;
+	}
+	throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second));
+}
+
+void qlang::Compiler::DeleteVariable(const std::string& name) {
+	PseudoVariables.push_back(name);
+	Variables.erase(name);
 }

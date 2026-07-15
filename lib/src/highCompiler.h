@@ -90,6 +90,8 @@ namespace qlang {
 			return compiler;
 		}
 
+		SectionsCode Compiling(std::string path);
+
 		std::map<const std::string,Type> getTypes() {
 			return Types;
 		}

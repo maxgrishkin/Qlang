@@ -3,14 +3,10 @@ cmake_minimum_required(VERSION 3.20)
 # Собираем все исходники из src
 file(GLOB_RECURSE LIB_SOURCES
         "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cxx"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc"
 )
 
 file(GLOB_RECURSE LIB_HEADERS
         "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hxx"
 )
 
 # Создаем библиотеку
@@ -45,8 +41,6 @@ if(BUILD_TESTS)
     # Собираем тестовые файлы
     file(GLOB_RECURSE TEST_SOURCES
             "${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp"
-            "${CMAKE_CURRENT_SOURCE_DIR}/test/*.cxx"
-            "${CMAKE_CURRENT_SOURCE_DIR}/test/*.cc"
     )
 
     # Создаем исполняемый файл для тестов

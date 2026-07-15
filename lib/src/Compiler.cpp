@@ -151,12 +151,9 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 					std::pair<unsigned int,unsigned int> position;
 					unsigned int levelBracket = 0;
 					for (;;) {
-						if (std::holds_alternative<token::RPar>(code[0].first)) {
-							if (levelBracket == 0) {
-								position = code[0].second;
-								break;
-							}
-							--levelBracket;
+						if (std::holds_alternative<token::RPar>(code[0].first) && levelBracket == 0) {
+							position = code[0].second;
+							break;
 						}
 						if (std::holds_alternative<token::LPar>(code[0].first) ||
 							std::holds_alternative<token::LCurlyBracket>(code[0].first) ||
@@ -164,7 +161,8 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 						{
 							++levelBracket;
 						}
-						if (std::holds_alternative<token::RCurlyBracket>(code[0].first) ||
+						if (std::holds_alternative<token::RPar>(code[0].first) ||
+							std::holds_alternative<token::RCurlyBracket>(code[0].first) ||
 							std::holds_alternative<token::RSquareBracket>(code[0].first))
 						{
 							--levelBracket;
@@ -200,6 +198,124 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 					res.code += "cmp rax, 1\n";
 					res.code += "jz .while_label" + std::to_string(countIf - 1) + '\n';
 					res.code += ".no_while_label" + std::to_string(countIf - 1) + ":\n";
+					break;
+				}
+				case token::Keyword::FOR: {
+					++countIf;
+					if (!std::holds_alternative<token::LPar>(code[0].first)) {
+						throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected LPar");
+					}
+					code.erase(code.begin());
+					token::CODE varExpression;
+					std::pair<unsigned int,unsigned int> position;
+					unsigned int levelBracket = 0;
+					for (;;) {
+						if (std::holds_alternative<token::Semicolon>(code[0].first) && levelBracket == 0) {
+							position = code[0].second;
+							break;
+						}
+						if (std::holds_alternative<token::LPar>(code[0].first) ||
+							std::holds_alternative<token::LCurlyBracket>(code[0].first) ||
+							std::holds_alternative<token::LSquareBracket>(code[0].first))
+						{
+							++levelBracket;
+						}
+						if (std::holds_alternative<token::RPar>(code[0].first) ||
+							std::holds_alternative<token::RCurlyBracket>(code[0].first) ||
+							std::holds_alternative<token::RSquareBracket>(code[0].first))
+						{
+							--levelBracket;
+						}
+						varExpression.push_back(code[0]);
+						code.erase(code.begin());
+					}
+					code.erase(code.begin());
+					varExpression.push_back(std::make_pair(token::Semicolon {},position));
+					varExpression.push_back(std::make_pair(token::RCurlyBracket {},position));
+					SectionsCode varSections = Compiling(varExpression);
+					res.data += varSections.data;
+					res.code += varSections.code;
+
+					token::CODE ifExpression;
+					for (;;) {
+						if (std::holds_alternative<token::Semicolon>(code[0].first) && levelBracket == 0) {
+							ifExpression.push_back(code[0]);
+							code.erase(code.begin());
+							break;
+						}
+						if (std::holds_alternative<token::LPar>(code[0].first) ||
+							std::holds_alternative<token::LCurlyBracket>(code[0].first) ||
+							std::holds_alternative<token::LSquareBracket>(code[0].first))
+						{
+							++levelBracket;
+						}
+						if (std::holds_alternative<token::RPar>(code[0].first) ||
+							std::holds_alternative<token::RCurlyBracket>(code[0].first) ||
+							std::holds_alternative<token::RSquareBracket>(code[0].first))
+						{
+							--levelBracket;
+						}
+						ifExpression.push_back(code[0]);
+						code.erase(code.begin());
+					}
+					Parser parser(this);
+
+					Value val = parser.ParseExpression(ifExpression);
+					if (val.type->type != "bool") {
+						throw std::runtime_error("Unexpected type for expression, at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + " expected bool");
+					}
+
+					token::CODE actionExpression;
+					for (;;) {
+						if (std::holds_alternative<token::RPar>(code[0].first) && levelBracket == 0) {
+							position = code[0].second;
+							break;
+						}
+						if (std::holds_alternative<token::LPar>(code[0].first) ||
+							std::holds_alternative<token::LCurlyBracket>(code[0].first) ||
+							std::holds_alternative<token::LSquareBracket>(code[0].first))
+						{
+							++levelBracket;
+						}
+						if (std::holds_alternative<token::RPar>(code[0].first) ||
+							std::holds_alternative<token::RCurlyBracket>(code[0].first) ||
+							std::holds_alternative<token::RSquareBracket>(code[0].first))
+						{
+							--levelBracket;
+						}
+						actionExpression.push_back(code[0]);
+						code.erase(code.begin());
+					}
+					actionExpression.push_back(std::make_pair(token::Semicolon {},position));
+					actionExpression.push_back(std::make_pair(token::RCurlyBracket {},position));
+					SectionsCode actionSectionsCode = Compiling(actionExpression);
+					res.data += actionSectionsCode.data;
+
+					if (!std::holds_alternative<token::RPar>(code[0].first)) {
+						throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected RPar");
+					}
+					code.erase(code.begin());
+					if (!std::holds_alternative<token::LCurlyBracket>(code[0].first)) {
+						throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected LCurlyBracket");
+					}
+					code.erase(code.begin());
+
+					Compiler forCompiler(Types,Functions,Variables,ParentFunc,countIf);
+					SectionsCode forSectionsCode = forCompiler.Compiling(code);
+					res.data += forSectionsCode.data;
+
+					res.code += val.code;
+					res.code += "cmp rax, 1\n";
+					res.code += "jnz .no_for_label" + std::to_string(countIf - 1) + '\n';
+
+					res.code += ".for_label" + std::to_string(countIf - 1) + ":\n";
+					res.code += forSectionsCode.code;
+					res.code += actionSectionsCode.code;
+
+					res.code += val.code;
+					res.code += "cmp rax, 1\n";
+					res.code += "jz .for_label" + std::to_string(countIf - 1) + '\n';
+					res.code += ".no_for_label" + std::to_string(countIf - 1) + ":\n";
 					break;
 				}
 				default:

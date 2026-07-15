@@ -36,12 +36,11 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="577a4689-4f42-479e-b873-79834eb29ecc" name="Changes" comment="add if statement">
+    <list default="true" id="577a4689-4f42-479e-b873-79834eb29ecc" name="Changes" comment="add while statement">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/lib/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/Compiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/Compiler.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/test/CompilerTest.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lib/test/CompilerTest.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/test/TestASM.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/test/TestASM.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -816,7 +815,33 @@
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///home/maximgrishin/CLionProjects/qLang/lib/src/Compiler.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///home/maximgrishin/CLionProjects/qLang/lib/src/Compiler.h" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///home/maximgrishin/CLionProjects/qLang/lib/src/Lexer.h" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///home/maximgrishin/CLionProjects/qLang/lib/src/Lexer.h" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib/src/Parser.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///home/maximgrishin/CLionProjects/qLang/lib/src/highCompiler.h" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib/src/token.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib/test/TestASM.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file:///usr/include/c++/12/bits/stl_pair.h" root0="FORCE_HIGHLIGHTING" />
@@ -846,8 +871,9 @@
     "CMake Application.qLang.executor": "Run",
     "CMake Application.qlang.executor": "Run",
     "CTest Application.All CTest.executor": "Run",
+    "Google Test.CompilerTest.Case8.executor": "Run",
     "Google Test.qLang.executor": "Run",
-    "Google Test.qlang_test.executor": "Run",
+    "Google Test.qlang_test.executor": "Debug",
     "Google Test.qlang_tests.executor": "Debug",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.RadMigrateCodeStyle": "true",
@@ -872,6 +898,12 @@
   }
 }]]></component>
   <component name="RunManager" selected="Google Test.qlang_test">
+    <configuration name="CompilerTest.Case8" type="CMakeGoogleTestRunConfigurationType" factoryName="Google Test" temporary="true" PROGRAM_PARAMS="--gtest_catch_exceptions=0" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="qLang" TARGET_NAME="qlang_test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="qLang" RUN_TARGET_NAME="qlang_test" TEST_CLASS="CompilerTest" TEST_METHOD="Case8" TEST_MODE="SUITE_TEST">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+        <option name="BeforeTestRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="qlang_test" type="CMakeGoogleTestRunConfigurationType" factoryName="Google Test" PROGRAM_PARAMS="--gtest_catch_exceptions=0" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="qLang" TARGET_NAME="qlang_test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="qLang" RUN_TARGET_NAME="qlang_test" TEST_MODE="SUITE_TEST">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -921,7 +953,13 @@
       <item itemvalue="CMake Application.gtest_main" />
       <item itemvalue="CMake Application.qlang_lib" />
       <item itemvalue="Google Test.qlang_test" />
+      <item itemvalue="Google Test.CompilerTest.Case8" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Google Test.CompilerTest.Case8" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -952,7 +990,7 @@
       <workItem from="1783395804469" duration="20000" />
       <workItem from="1783594497357" duration="1120000" />
       <workItem from="1783953432804" duration="16555000" />
-      <workItem from="1784015218311" duration="24068000" />
+      <workItem from="1784015218311" duration="28431000" />
     </task>
     <task id="LOCAL-00001" summary="Lexer">
       <option name="closed" value="true" />
@@ -994,7 +1032,15 @@
       <option name="project" value="LOCAL" />
       <updated>1784045458495</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="add while statement">
+      <option name="closed" value="true" />
+      <created>1784057548558</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1784057548558</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1034,40 +1080,16 @@
     <MESSAGE value="add parsing primary expression" />
     <MESSAGE value="add variable assignment" />
     <MESSAGE value="add if statement" />
-    <option name="LAST_COMMIT_MESSAGE" value="add if statement" />
+    <MESSAGE value="add while statement" />
+    <option name="LAST_COMMIT_MESSAGE" value="add while statement" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/lib/src/Compiler.cpp</url>
-          <line>47</line>
-          <option name="timeStamp" value="32" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/lib/src/Compiler.cpp</url>
-          <line>15</line>
-          <option name="timeStamp" value="35" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/lib/src/Parser.cpp</url>
-          <line>108</line>
-          <option name="timeStamp" value="40" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/lib/src/Parser.cpp</url>
-          <line>13</line>
-          <option name="timeStamp" value="41" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/lib/src/Parser.cpp</url>
-          <line>88</line>
-          <option name="timeStamp" value="42" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/lib/src/Parser.cpp</url>
-          <line>40</line>
-          <option name="timeStamp" value="43" />
+          <line>6</line>
+          <option name="timeStamp" value="50" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

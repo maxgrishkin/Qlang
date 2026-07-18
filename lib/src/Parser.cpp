@@ -46,8 +46,7 @@ qlang::Value qlang::Parser::ParseExpression(token::CODE& code, int left_binding_
 		resStr += val.code;
 		resStr += "mov rbx,rax\n";
 		resStr += "pop rax\n";
-		auto op = lType->operators.find(_operator);
-		resStr += op->second->asmCode[val.type];
+		resStr += typeOper->second->asmCode.at(val.type);
 		return Value{.code = resStr, .type = typeOper->second->TypeOper.at(val.type)};
 	};
 	auto Operator = [&code, generateBinaryOperator](const Type* lType, const int rbp, const int lbp) -> Value {
@@ -76,7 +75,7 @@ qlang::Value qlang::Parser::ParseExpression(token::CODE& code, int left_binding_
 		[&](token::Percent) -> Value {
 			return generateBinaryOperator(lType, "%", true, rbp);
 		},
-		[&](token::Equal) -> Value {
+		[&](token::Equal2) -> Value {
 			return generateBinaryOperator(lType, "==", true, rbp);
 		},
 		[&](token::NoEqual) -> Value {

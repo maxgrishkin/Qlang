@@ -7,6 +7,6 @@
 
 int main() {
 	qlang::highCompiler hc;
-	qlang::SectionsCode asmCode = hc.Compiling("./highCompilerTestSource/Case2.q");
-	TestFullCode(asmCode,hc,{});
+	qlang::SectionsCode asmCode = hc.Compiling("./Test.q");
+	std::cout << TestFullCode(asmCode,hc,{});
 }

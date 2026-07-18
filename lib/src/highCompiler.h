@@ -19,8 +19,13 @@ namespace qlang {
 		BinaryOperator GreatIntOperator;
 		BinaryOperator EqualIntOperator;
 		BinaryOperator NotEqualIntOperator;
+
 		BinaryOperator EqualBoolOperator;
 		BinaryOperator NotEqualBoolOperator;
+
+		BinaryOperator EqualCharOperator;
+		BinaryOperator NotEqualCharOperator;
+
 		BinaryOperator LessOrEqualIntOperator;
 		BinaryOperator GreatOrEqualIntOperator;
 
@@ -39,6 +44,8 @@ namespace qlang {
 
 			const std::map<const Type*,const Type*,TypeComparator> TypeOpers3({{&Types["bool"],&Types["bool"]}},TypeComparator{});
 
+			const std::map<const Type*,const Type*,TypeComparator> TypeOpers4({{&Types["char"],&Types["bool"]}},TypeComparator{});
+
 			PlusIntOperator = BinaryOperator{.TypeOper = TypeOpers,.asmCode = {{ &Types["int"], "add rax, rbx\n"}}};
 			MinusIntOperator = BinaryOperator{.TypeOper = TypeOpers,.asmCode = {{ &Types["int"], "sub rax, rbx\n"}}};
 			MultiplyIntOperator = BinaryOperator{.TypeOper = TypeOpers,.asmCode = {{ &Types["int"], "mul rbx\n"}}};
@@ -52,8 +59,11 @@ namespace qlang {
 			LessOrEqualIntOperator = BinaryOperator{.TypeOper = TypeOpers2,.asmCode = {{ &Types["int"], "cmp rax, rbx\nsetle bl\nmovzx rax, bl\n"}}};
 			GreatOrEqualIntOperator = BinaryOperator{.TypeOper = TypeOpers2,.asmCode = {{ &Types["int"], "cmp rax, rbx\nsetge bl\nmovzx rax, bl\n"}}};
 
-			EqualIntOperator = BinaryOperator{.TypeOper = TypeOpers2,.asmCode = {{ &Types["bool"], "cmp rax, rbx\nsete bl\nmovzx rax, bl\n"}}};
-			NotEqualIntOperator = BinaryOperator{.TypeOper = TypeOpers2,.asmCode = {{ &Types["bool"], "cmp rax, rbx\nsetne bl\nmovzx rax, bl\n"}}};
+			EqualIntOperator = BinaryOperator{.TypeOper = TypeOpers3,.asmCode = {{ &Types["bool"], "cmp rax, rbx\nsete bl\nmovzx rax, bl\n"}}};
+			NotEqualIntOperator = BinaryOperator{.TypeOper = TypeOpers3,.asmCode = {{ &Types["bool"], "cmp rax, rbx\nsetne bl\nmovzx rax, bl\n"}}};
+
+			EqualCharOperator = BinaryOperator{.TypeOper = TypeOpers4,.asmCode = {{ &Types["char"], "cmp rax, rbx\nsete bl\nmovzx rax, bl\n"}}};
+			NotEqualCharOperator = BinaryOperator{.TypeOper = TypeOpers4,.asmCode = {{ &Types["char"], "cmp rax, rbx\nsetne bl\nmovzx rax, bl\n"}}};
 
 			const std::map<std::string,BinaryOperator*> intOperators = {
 				{"+",&PlusIntOperator},
@@ -73,9 +83,14 @@ namespace qlang {
 				{"==",&EqualBoolOperator},
 				{"!=",&NotEqualBoolOperator},
 			};
+			const std::map<std::string,BinaryOperator*> charOperators = {
+				{"==",&EqualCharOperator},
+				{"!=",&NotEqualCharOperator},
+			};
 
 			Types["int"].operators = intOperators;
 			Types["bool"].operators = boolOperators;
+			Types["char"].operators = charOperators;
 		}
 
 		[[nodiscard]] Compiler newCompiler(const std::string& nameFunc, const std::vector<const Type*>& input = {}) const {

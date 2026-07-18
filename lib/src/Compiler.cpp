@@ -13,7 +13,14 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 		[code](auto&& a)  {
 			throw std::runtime_error("Unexpected token: " + token::TokenToString(a) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second));
 		},
-		[&code, &breaker, this](token::RCurlyBracket)  {
+		[&code, &breaker, this, &res](token::RCurlyBracket)  {
+			if (isMustReturn) {
+				throw std::runtime_error("Unexpected end of block of code, at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second));
+			}
+			if (isFunk)
+			{
+				res.code += "ret\n";
+			}
 			code.erase(code.begin());
 			std::vector<std::string> varsNames;
 			varsNames.reserve(Variables.size());
@@ -45,7 +52,7 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 			res.code += var.code;
 			res.data += var.data;
 		},
-		[&code, this, &res](token::Keyword keyword) {
+		[&code, this, &res, &breaker](token::Keyword keyword) {
 			code.erase(code.begin());
 			switch(keyword) {
 				case token::Keyword::VAR: {
@@ -98,7 +105,7 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 						throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected LCurlyBracket");
 					}
 					code.erase(code.begin());
-					Compiler ifCompiler(Types,Functions,Variables,PseudoVariables,ParentFunc,countIf);
+					Compiler ifCompiler(Types,Functions,Variables,PseudoVariables,ParentFunc,typeReturn,false, false);
 					SectionsCode ifSectionsCode = ifCompiler.Compiling(code);
 					res.data += ifSectionsCode.data;
 					res.code += val.code;
@@ -150,7 +157,7 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 						throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected LCurlyBracket");
 					}
 					code.erase(code.begin());
-					Compiler whileCompiler(Types,Functions,Variables,PseudoVariables,ParentFunc,countIf);
+					Compiler whileCompiler(Types,Functions,Variables,PseudoVariables,ParentFunc,typeReturn,false, false);
 					SectionsCode whileSectionsCode = whileCompiler.Compiling(code);
 					res.data += whileSectionsCode.data;
 
@@ -158,12 +165,16 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 					res.code += "cmp rax, 1\n";
 					res.code += "jnz .no_while_label" + std::to_string(countIf - 1) + '\n';
 
-					res.code += ".while_label" + std::to_string(countIf - 1) + ":\n";
+					if (!whileCompiler.getIsReturns()) {
+						res.code += ".while_label" + std::to_string(countIf - 1) + ":\n";
+					}
 					res.code += whileSectionsCode.code;
 
-					res.code += val.code;
-					res.code += "cmp rax, 1\n";
-					res.code += "jz .while_label" + std::to_string(countIf - 1) + '\n';
+					if (!whileCompiler.getIsReturns()) {
+						res.code += val.code;
+						res.code += "cmp rax, 1\n";
+						res.code += "jz .while_label" + std::to_string(countIf - 1) + '\n';
+					}
 					res.code += ".no_while_label" + std::to_string(countIf - 1) + ":\n";
 					break;
 				}
@@ -276,7 +287,7 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 					}
 					code.erase(code.begin());
 
-					Compiler forCompiler(Types,Functions,Variables,PseudoVariables,ParentFunc,countIf);
+					Compiler forCompiler(Types,Functions,Variables,PseudoVariables,ParentFunc,typeReturn,false, false);
 					SectionsCode forSectionsCode = forCompiler.Compiling(code);
 					res.data += forSectionsCode.data;
 
@@ -284,14 +295,44 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 					res.code += "cmp rax, 1\n";
 					res.code += "jnz .no_for_label" + std::to_string(countIf - 1) + '\n';
 
-					res.code += ".for_label" + std::to_string(countIf - 1) + ":\n";
+					if (!forCompiler.getIsReturns()) {
+						res.code += ".for_label" + std::to_string(countIf - 1) + ":\n";
+					}
 					res.code += forSectionsCode.code;
-					res.code += actionSectionsCode.code;
+					if (!forCompiler.getIsReturns()) {
+						res.code += actionSectionsCode.code;
 
-					res.code += val.code;
-					res.code += "cmp rax, 1\n";
-					res.code += "jz .for_label" + std::to_string(countIf - 1) + '\n';
+						res.code += val.code;
+						res.code += "cmp rax, 1\n";
+						res.code += "jz .for_label" + std::to_string(countIf - 1) + '\n';
+					}
 					res.code += ".no_for_label" + std::to_string(countIf - 1) + ":\n";
+					break;
+				}
+				case token::Keyword::RETURN: {
+					isReturns = true;
+					breaker = true;
+					if (typeReturn->type == "void") {
+						if (!std::holds_alternative<token::Semicolon>(code[0].first)) { //next token must be a Semicolon
+							throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected Semicolon");
+						}
+						code.erase(code.begin());
+					}
+					else {
+						Parser parser(this);
+						Value val = parser.ParseExpression(code);
+						if (val.type->type != typeReturn->type) {
+							throw std::runtime_error("Unexpected type return expression, at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + " expected " + typeReturn->type);
+						}
+						if (!std::holds_alternative<token::Semicolon>(code[0].first)) { //next token must be a Semicolon
+							throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected Semicolon");
+						}
+						code.erase(code.begin());
+						res.code += val.code;
+					}
+					res.code += "ret\n";
+					Compiler compiler(Types,Functions,Variables,PseudoVariables,ParentFunc,typeReturn);
+					compiler.Compiling(code);
 					break;
 				}
 				default:

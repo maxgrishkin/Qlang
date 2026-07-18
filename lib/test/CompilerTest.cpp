@@ -13,6 +13,7 @@ TEST(CompilerTest, Case1) {
 	std::string CodeSection;
 	std::string DataSection;
 	qlang::highCompiler hc;
+	hc.MakeMain();
 	qlang::Compiler compiler = hc.newCompiler("main");
 	qlang::SectionsCode sections_code = compiler.Compiling(CompilerCode);
 	CodeSection += sections_code.code;
@@ -28,6 +29,7 @@ TEST(CompilerTest, Case2) {
 	std::string CodeSection;
 	std::string DataSection;
 	qlang::highCompiler hc;
+	hc.MakeMain();
 	qlang::Compiler compiler = hc.newCompiler("main");
 	qlang::SectionsCode sections_code = compiler.Compiling(CompilerCode);
 	CodeSection += sections_code.code;
@@ -44,6 +46,7 @@ TEST(CompilerTest, Case3) {
 	std::string CodeSection;
 	std::string DataSection;
 	qlang::highCompiler hc;
+	hc.MakeMain();
 	qlang::Compiler compiler = hc.newCompiler("main");
 	qlang::SectionsCode sections_code = compiler.Compiling(CompilerCode);
 	CodeSection += sections_code.code;
@@ -60,6 +63,7 @@ TEST(CompilerTest, Case4) {
 	std::string CodeSection;
 	std::string DataSection;
 	qlang::highCompiler hc;
+	hc.MakeMain();
 	qlang::Compiler compiler = hc.newCompiler("main");
 	qlang::SectionsCode sections_code = compiler.Compiling(CompilerCode);
 	CodeSection += sections_code.code;
@@ -76,6 +80,7 @@ TEST(CompilerTest, Case5) {
 	std::string CodeSection;
 	std::string DataSection;
 	qlang::highCompiler hc;
+	hc.MakeMain();
 	qlang::Compiler compiler = hc.newCompiler("main");
 	qlang::SectionsCode sections_code = compiler.Compiling(CompilerCode);
 	CodeSection += sections_code.code;
@@ -92,6 +97,7 @@ TEST(CompilerTest, Case6) {
 	std::string CodeSection;
 	std::string DataSection;
 	qlang::highCompiler hc;
+	hc.MakeMain();
 	qlang::Compiler compiler = hc.newCompiler("main");
 	qlang::SectionsCode sections_code = compiler.Compiling(CompilerCode);
 	CodeSection += sections_code.code;
@@ -108,6 +114,7 @@ TEST(CompilerTest, Case7) {
 	std::string CodeSection;
 	std::string DataSection;
 	qlang::highCompiler hc;
+	hc.MakeMain();
 	qlang::Compiler compiler = hc.newCompiler("main");
 	qlang::SectionsCode sections_code = compiler.Compiling(CompilerCode);
 	CodeSection += sections_code.code;
@@ -124,6 +131,7 @@ TEST(CompilerTest, Case8) {
 	std::string CodeSection;
 	std::string DataSection;
 	qlang::highCompiler hc;
+	hc.MakeMain();
 	qlang::Compiler compiler = hc.newCompiler("main");
 	qlang::SectionsCode sections_code = compiler.Compiling(CompilerCode);
 	CodeSection += sections_code.code;

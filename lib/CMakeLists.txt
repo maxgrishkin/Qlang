@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
+set(CMAKE_CXX_FLAGS_RELEASE "-O0 -march=native" CACHE STRING "" FORCE)
 # Собираем все исходники из src
 file(GLOB_RECURSE LIB_SOURCES
         "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
@@ -45,7 +46,8 @@ if(BUILD_TESTS)
 
     # Создаем исполняемый файл для тестов
     add_executable(qlang_test ${TEST_SOURCES}
-            test/CompilerTest.cpp)
+            test/CompilerTest.cpp
+            test/highCompilerTest.cpp)
 
     # Линкуем библиотеки для тестов
     target_link_libraries(qlang_test PRIVATE

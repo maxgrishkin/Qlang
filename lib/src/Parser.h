@@ -15,7 +15,7 @@ namespace qlang{
 
 		static std::string FuncToManglingName(const SpecificFunction& Func) {
 			std::string res = "_";
-			for (const auto* type : Func.TypeFunc.first) {
+			for (const auto* const type : Func.TypeFunc.first) {
 				res += std::to_string(type->type.size()) + '_' + type->type;
 			}
 			res += std::to_string(Func.name.size()) + '_' + Func.name;

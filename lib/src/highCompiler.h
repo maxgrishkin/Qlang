@@ -5,10 +5,9 @@
 namespace qlang {
 	class highCompiler {
 	private:
-		std::map<const std::string,Type> Types;
-		std::map<const std::string,Function> Functions;
-		std::map<const std::string,Variable> Variables;
-		unsigned int countIf = 0;
+		std::map<std::string,Type> Types;
+		std::map<std::string,Function> Functions;
+		std::map<std::string,Variable> Variables;
 
 		BinaryOperator PlusIntOperator;
 		BinaryOperator MinusIntOperator;
@@ -25,6 +24,7 @@ namespace qlang {
 		BinaryOperator LessOrEqualIntOperator;
 		BinaryOperator GreatOrEqualIntOperator;
 
+		Argument ArgAssignment(token::CODE& code, const Compiler& compiler);
 	public:
 		highCompiler() {
 			Types = {
@@ -76,30 +76,33 @@ namespace qlang {
 
 			Types["int"].operators = intOperators;
 			Types["bool"].operators = boolOperators;
-
-			//TODO ubrat kostil
-			Function Main{.name = "main"};
-			std::map<std::vector<const Type*>,const Type*,TypeComparator> TypeFunc;
-			std::vector<const Type*> inputMain = {};
-			TypeFunc.emplace(inputMain,&Types.at("int"));
-			Functions.emplace("main",Main);
 		}
 
-		Compiler newCompiler(const std::string& nameFunc) {
-			Compiler compiler = Compiler(Types,Functions,Variables,Functions.at(nameFunc)[{}],countIf);
+		[[nodiscard]] Compiler newCompiler(const std::string& nameFunc, const std::vector<const Type*>& input = {}) const {
+			Compiler compiler = Compiler(Types,Functions,Variables,Functions.at(nameFunc)[input]);
 			return compiler;
 		}
 
-		SectionsCode Compiling(std::string path);
+		SectionsCode Compiling(const std::string& path);
+		SectionsCode FunctionsAssignment(token::CODE& code);
 
-		std::map<const std::string,Type> getTypes() {
+		void MakeMain() {
+			Function Main{.name = "main"};
+			std::vector<const Type*> inputMain = {};
+			std::vector<std::string> inputArgMain = {};
+			Main.TypeFunc.emplace(inputMain,&Types.at("int"));
+			Main.args.emplace(inputMain,inputArgMain);
+			Functions.emplace("main",Main);
+		}
+
+		[[nodiscard]] const std::map<std::string, Type>& getTypes() const {
 			return Types;
 		}
-		std::map<const std::string,Function> getFunctions() {
+		[[nodiscard]] const std::map<std::string,Function>& getFunctions() const{
 			return Functions;
 		}
-		std::map<const std::string,Variable> getVariables() {
-			return  Variables;
+		[[nodiscard]] const std::map<std::string,Variable>& getVariables() const {
+			return Variables;
 		}
 	};
 }

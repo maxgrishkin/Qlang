@@ -64,15 +64,60 @@ namespace qlang{
 	struct SpecificFunction {
 		const std::string name;
 		std::pair<std::vector<const Type*>,const Type*> TypeFunc;
+		std::pair<std::vector<const Type*>,std::vector<std::string>> args;
 	};
-
 	struct Function {
 		const std::string name;
 		std::map<std::vector<const Type*>,const Type*,TypeComparator> TypeFunc;
+		std::map<std::vector<const Type*>,std::vector<std::string>> args;
 
 		SpecificFunction operator[](const std::vector<const Type*>& input) const {
 			SpecificFunction res{.name = name};
-			res.TypeFunc = std::make_pair(input,TypeFunc.find(input)->second);
+
+			bool exist = false;
+			for (const auto& type : TypeFunc) {
+				if (input.size() != type.first.size()) {
+					continue;
+				}
+				bool matching = true;
+				for (unsigned int i = 0;i < type.first.size();++i) {
+					if (input[i]->type != type.first[i]->type) {
+						matching = false;
+						break;
+					}
+				}
+				if (!matching) {
+					continue;
+				}
+				exist = true;
+				res.TypeFunc = type;
+				break;
+			}
+			if (!exist) {
+				throw std::runtime_error("this SpecificFunction not exist");
+			}
+			exist = false;
+			for (const auto& arg : args) {
+				if (input.size() != arg.first.size()) {
+					continue;
+				}
+				bool matching = true;
+				for (unsigned int i = 0;i < arg.first.size();++i) {
+					if (input[i]->type != arg.first[i]->type) {
+						matching = false;
+						break;
+					}
+				}
+				if (!matching) {
+					continue;
+				}
+				exist = true;
+				res.args = arg;
+				break;
+			}
+			if (!exist) {
+				throw std::runtime_error("this SpecificFunction not exist");
+			}
 			return res;
 		}
 	};
@@ -82,6 +127,11 @@ namespace qlang{
 		const Type* type;
 		SpecificFunction ParentFunc;
 		bool initialize = false;
+	};
+
+	struct  Argument {
+		const std::string name;
+		const Type* type;
 	};
 
 	struct BinaryOperator {
@@ -97,6 +147,7 @@ namespace qlang{
 	struct SectionsCode {
 		std::string code;
 		std::string data;
+		std::string otherFunks;
 	};
 
 	inline std::map<token::Any,int> operatorsPower = {

@@ -37,20 +37,9 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="577a4689-4f42-479e-b873-79834eb29ecc" name="Changes" comment="added char processing (v1.0.1)">
-      <change afterPath="$PROJECT_DIR$/Test/Print.asm" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Test/Test.hed" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/src/HederCompiler.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/src/HederCompiler.h" afterDir="false" />
+    <list default="true" id="577a4689-4f42-479e-b873-79834eb29ecc" name="Changes" comment="added include asm (v1.1.0)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test.q" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Test.q" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/lib/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/Lexer.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/Lexer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/Type.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/Type.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/highCompiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/highCompiler.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/highCompiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/highCompiler.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/token.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/token.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/test/TestASM.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/test/TestASM.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/test/highCompilerTest.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lib/test/highCompilerTest.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
@@ -741,7 +730,7 @@
       <workItem from="1784135699797" duration="28768000" />
       <workItem from="1784298043654" duration="11261000" />
       <workItem from="1784348886259" duration="8402000" />
-      <workItem from="1784365347758" duration="31622000" />
+      <workItem from="1784365347758" duration="33271000" />
     </task>
     <task id="LOCAL-00001" summary="Lexer">
       <option name="closed" value="true" />
@@ -831,7 +820,15 @@
       <option name="project" value="LOCAL" />
       <updated>1784370995151</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="added include asm (v1.1.0)">
+      <option name="closed" value="true" />
+      <created>1784563707852</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1784563707852</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -876,16 +873,12 @@
     <MESSAGE value="update variable logic" />
     <MESSAGE value="added function (v1.0.0)" />
     <MESSAGE value="added char processing (v1.0.1)" />
-    <option name="LAST_COMMIT_MESSAGE" value="added char processing (v1.0.1)" />
+    <MESSAGE value="added include asm (v1.1.0)" />
+    <option name="LAST_COMMIT_MESSAGE" value="added include asm (v1.1.0)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/lib/src/highCompiler.cpp</url>
-          <line>160</line>
-          <option name="timeStamp" value="81" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/lib/test/TestASM.h</url>
           <line>92</line>

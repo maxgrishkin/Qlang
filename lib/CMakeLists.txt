@@ -11,7 +11,9 @@ file(GLOB_RECURSE LIB_HEADERS
 )
 
 # Создаем библиотеку
-add_library(qlang_lib STATIC ${LIB_SOURCES} ${LIB_HEADERS})
+add_library(qlang_lib STATIC ${LIB_SOURCES} ${LIB_HEADERS}
+        src/HederCompiler.cpp
+        src/HederCompiler.h)
 
 # Устанавливаем include директории для библиотеки
 target_include_directories(qlang_lib PUBLIC

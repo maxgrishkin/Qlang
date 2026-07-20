@@ -2,6 +2,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <stdexcept>
 
 #include "token.h"
 
@@ -67,7 +68,7 @@ namespace qlang{
 		std::pair<std::vector<const Type*>,std::vector<std::string>> args;
 	};
 	struct Function {
-		const std::string name;
+		std::string name;
 		std::map<std::vector<const Type*>,const Type*,TypeComparator> TypeFunc;
 		std::map<std::vector<const Type*>,std::vector<std::string>> args;
 
@@ -96,7 +97,6 @@ namespace qlang{
 			if (!exist) {
 				throw std::runtime_error("this SpecificFunction not exist");
 			}
-			exist = false;
 			for (const auto& arg : args) {
 				if (input.size() != arg.first.size()) {
 					continue;
@@ -111,12 +111,8 @@ namespace qlang{
 				if (!matching) {
 					continue;
 				}
-				exist = true;
 				res.args = arg;
 				break;
-			}
-			if (!exist) {
-				throw std::runtime_error("this SpecificFunction not exist");
 			}
 			return res;
 		}
@@ -145,9 +141,16 @@ namespace qlang{
 	};
 
 	struct SectionsCode {
+		std::string externSection;
 		std::string code;
 		std::string data;
 		std::string otherFunks;
+	};
+
+	struct Context {
+		std::map<std::string,Type> Types;
+		std::map<std::string,Function> Functions;
+		std::map<std::string,Variable> Variables;
 	};
 
 	inline std::map<token::Any,int> operatorsPower = {

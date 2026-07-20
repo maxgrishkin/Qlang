@@ -7,6 +7,7 @@
 
 int main() {
 	qlang::highCompiler hc;
-	qlang::SectionsCode asmCode = hc.Compiling("./Test.q");
-	std::cout << TestFullCode(asmCode,hc,{});
+	const std::vector<std::string> objectFiles = hc.Compiling("./Test/Test.q", true);
+	int exitCode = TestObjectFiles(objectFiles);
+	std::cout << "\nProcess finished with exit code -> " << exitCode << "\n";
 }

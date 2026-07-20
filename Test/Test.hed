@@ -1,0 +1,1 @@
+.asm(Print.asm,fn void print(int));

@@ -19,6 +19,7 @@ namespace qlang::token {
         BREAK,
         CONTINUE,
         ELSE,
+        INCLUDE,
     };
     struct LPar {};   // (
     struct RPar {};   // (
@@ -38,6 +39,7 @@ namespace qlang::token {
     struct Percent {};   // /
     struct Comma {};   // ,
     struct Dot {};   // .
+    struct Hash{};   //#
     struct Equal {};   // =
     struct NoEqual {};   // !=
     struct Equal2 {};   // ==
@@ -59,7 +61,7 @@ namespace qlang::token {
     using Any = std::variant<
     Keyword, LPar, RPar, Equal, Equal2, LCurlyBracket, RCurlyBracket, Semicolon, Comma, Plus, Minus, Asterisk, Slash, Identifier,
     Integer, String,LSquareBracket,RSquareBracket,LAngleBracket,RAngleBracket,LAngleBracketEqual,RAngleBracketEqual,PlusPlus,MinusMinus,
-    NoEqual,Char,Dot,Percent>;
+    NoEqual,Char,Dot,Hash,Percent>;
 
     using CODE = std::vector<std::pair<Any,std::pair<unsigned int,unsigned short>>>;
 
@@ -79,6 +81,7 @@ namespace qlang::token {
                         case Keyword::IN: return "in";
                         case Keyword::BREAK: return "break";
                         case Keyword::CONTINUE: return "continue";
+                        default: ;
                     }
                     return "unknown keyword";
                 },
@@ -96,6 +99,7 @@ namespace qlang::token {
                 [](Percent)-> std::string  { return "%"; },
                 [](Comma)-> std::string  { return ","; },
                 [](Dot)-> std::string  { return "."; },
+                [](Hash)-> std::string  { return "#"; },
                 [](Equal)-> std::string  { return "="; },
                 [](Equal2)-> std::string  { return "=="; },
                 [](NoEqual)-> std::string  { return "!="; },

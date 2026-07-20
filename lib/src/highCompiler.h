@@ -98,7 +98,7 @@ namespace qlang {
 			return compiler;
 		}
 
-		SectionsCode Compiling(const std::string& path);
+		std::vector<std::string> Compiling(const std::string& path, bool Main);
 		SectionsCode FunctionsAssignment(token::CODE& code);
 
 		void MakeMain() {

@@ -87,3 +87,27 @@ inline int TestFullCode(const qlang::SectionsCode& sections_code, qlang::highCom
 	system("rm -f test.asm test.o test");
 	return exit_code;
 }
+
+inline int TestObjectFiles(const std::vector<std::string>& objectFiles) {
+	std::string command = "ld -o test";
+	for (const auto& object : objectFiles) {
+		command += ' ' + object;
+	}
+	system(command.c_str());
+
+	const int status = system("./test");
+
+	int exit_code = -1;
+	if (status != -1) {
+		if (WIFEXITED(status)) {
+			exit_code = WEXITSTATUS(status);
+		}
+	}
+
+	command = "rm -f test";
+	for (const auto& object : objectFiles) {
+		command += ' ' + object;
+	}
+	system(command.c_str());
+	return exit_code;
+}

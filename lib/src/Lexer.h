@@ -151,6 +151,10 @@ namespace qlang::Lexer{
 					result.emplace_back(std::make_pair(token::Dot{},std::make_pair(line,symbol)));
 					symbol++;
 					break;
+				case '#':
+					result.emplace_back(std::make_pair(token::Hash{},std::make_pair(line,symbol)));
+					symbol++;
+					break;
 				case '=':
 					if (i != code_length - 1) {
 						if (code[i+1] == '=') {
@@ -297,6 +301,7 @@ namespace qlang::Lexer{
 							{"break",token::Keyword::BREAK},
 							{"continue",token::Keyword::CONTINUE},
 							{"else",token::Keyword::ELSE},
+							{"include",token::Keyword::INCLUDE},
 						};
 						if (auto keyword = Keywords.find(text); keyword != Keywords.end()) {
 							result.emplace_back(std::make_pair(keyword->second,std::make_pair(line,preSymbol)));

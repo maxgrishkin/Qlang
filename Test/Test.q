@@ -1,32 +1,18 @@
 #include<Test.hed>
 
-fn int calculate(var int a, var int b,var char operator)
+fn int fib(var int index)
 {
-    if(operator == '+')
-    {
-        return a + b;
+    if(index <= 1){
+        return 1;
     }
-    if(operator == '-')
-    {
-        return a - b;
-    }
-    if(operator == '*')
-    {
-        return a * b;
-    }
-    if(operator == '/')
-    {
-        return a / b;
-    }
-    if(operator == '%')
-    {
-        return a % b;
-    }
-    return 0;
+    return fib(index - 1) * index;
 }
 
 fn int main()
 {
-    print(calculate(20,20,'/'));
+    for(var int i = 1; i<=20; i = i+1){
+        print(fib(i));
+    }
+
     return 0;
 }

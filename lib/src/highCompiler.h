@@ -29,7 +29,7 @@ namespace qlang {
 		BinaryOperator LessOrEqualIntOperator;
 		BinaryOperator GreatOrEqualIntOperator;
 
-		Argument ArgAssignment(token::CODE& code, const Compiler& compiler);
+		Argument ArgAssignment(token::CODE& code, const Compiler& compiler) const;
 	public:
 		highCompiler() {
 			Types = {

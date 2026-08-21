@@ -164,7 +164,7 @@ qlang::Value qlang::Parser::VariableReference(token::CODE &code) const {
 				asmCode += "mov rax,r9\n";
 			}
 			else if (i + 1 > 6) {
-				asmCode += "mov rax,[rbp + " + std::to_string((args.size() - i) * 8) + "]\n";
+				asmCode += "mov rax, qword [rbp + " + std::to_string((args.size() - i - 1) * 8) + "]\n";
 			}
 			return Value{.code = asmCode,.type = type};
 		}
@@ -189,7 +189,7 @@ qlang::Value qlang::Parser::FunctionCall(token::CODE &code) const {
 	}
 	code.erase(code.begin());
 
-	std::string finishCode = "push rdi\npush rsi\npush rdx\npush rcx\npush r8\npush r9\n";
+	std::string finishCode;
 	std::vector<const Type*> TypesFunc;
 	unsigned char arguments = 0;
 
@@ -256,14 +256,15 @@ qlang::Value qlang::Parser::FunctionCall(token::CODE &code) const {
 		code.erase(code.begin());
 	}
 	if (arguments > 6) {
-		finishCode += "sub rsp, 8\n" + finishCode + "add rsp, " + std::to_string((arguments - 6) * 8 + 8);
+		finishCode = "sub rsp, 8\n" + finishCode + "add rsp, " + std::to_string((arguments - 6) * 8 + 8) + '\n';
 	}
+	finishCode = "push rdi\npush rsi\npush rdx\npush rcx\npush r8\npush r9\npush rbp\n" + finishCode;
 	auto Functions = compiler->getFunctions();
 	auto func = Functions.find(name);
 	if (func == Functions.end()) {
 		throw std::runtime_error("Function missing, at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second));
 	}
 	finishCode += "call " + FuncToManglingName(func->second[TypesFunc]) + "\n";
-	finishCode += "pop r9\npop r8\npop rcx\npop rdx\npop rsi\npop rdi\n";
+	finishCode += "pop rbp\npop r9\npop r8\npop rcx\npop rdx\npop rsi\npop rdi\n";
 	return Value {.code = finishCode,.type = func->second[TypesFunc].TypeFunc.second};
 }

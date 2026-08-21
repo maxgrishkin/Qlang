@@ -28,3 +28,9 @@ TEST(highCompilerTest, Case4) {
 	std::vector<std::string> objectFiles = hc.Compiling("./highCompilerTestSource/Case4.q");
 	EXPECT_EQ(TestObjectFiles(objectFiles), 228);
 }
+
+TEST(highCompilerTest, Case5) {
+	qlang::highCompiler hc;
+	std::vector<std::string> objectFiles = hc.Compiling("./highCompilerTestSource/Case5.q");
+	EXPECT_EQ(TestObjectFiles(objectFiles), 228);
+}

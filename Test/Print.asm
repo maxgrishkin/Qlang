@@ -1,113 +1,94 @@
-section .text
 global _3_int5_print
+section .text
 
-; Функция print(number)
-; Выводит число на экран
 _3_int5_print:
-    call toStr          ; Преобразуем число в строку
-    ; rax = указатель на строку
-    ; rbx = длина строки
-
-    ; Выводим строку
-    mov rsi, rax        ; Указатель на строку
-    mov rdx, rbx        ; Длина строки
-    mov rax, 1          ; sys_write
-    mov rdi, 1          ; stdout
-    syscall
-
-    ; Освобождаем память
-    mov rdi, rax        ; Указатель на строку (сохранить перед syscall!)
-    mov rax, 11         ; munmap
-    mov rsi, rbx        ; Размер (длина + 1 для нуль-терминатора)
-    inc rsi
-    syscall
-
-    ret
-
-; Функция toStr(number)
-; Преобразует число в строку
-; Вход: rdi = число для преобразования
-; Выход: rax = указатель на строку, rbx = длина строки
-toStr:
+    ; Сохраняем регистры
     push rbp
     mov rbp, rsp
+    push rbx
+    push rcx
+    push rdx
+    push rsi
+    push rdi
 
-    ; Проверка на 0
+    ; Выделяем место под буфер в стеке (32 байта)
+    sub rsp, 32
+
+    ; Проверка на ноль
     cmp rdi, 0
     jne .not_zero
-    ; Если число 0, возвращаем "0"
-    mov rax, 9          ; mmap
-    xor rdi, rdi
-    mov rsi, 2          ; 2 байта (цифра + нуль)
-    mov rdx, 3          ; PROT_READ | PROT_WRITE
-    mov r10, 0x22       ; MAP_ANONYMOUS | MAP_PRIVATE
-    mov r8, -1
-    xor r9, r9
-    syscall
 
-    mov byte [rax], '0'
-    mov byte [rax+1], 0
-    mov rbx, 1          ; длина = 1
-    pop rbp
-    ret
+    ; Если число равно 0, выводим '0' и '\n'
+    mov byte [rsp], '0'
+    mov byte [rsp + 1], 10
+    mov rax, 1                  ; sys_write
+    mov rdi, 1                  ; stdout
+    mov rsi, rsp                ; указатель на буфер
+    mov rdx, 2                  ; длина: '0' + '\n'
+    syscall
+    jmp .end
 
 .not_zero:
-    ; Сохраняем исходное число
-    mov r12, rdi        ; r12 = исходное число
+    ; Флаг отрицательности в rsi (0 - положительное, 1 - отрицательное)
+    xor rsi, rsi
+    test rdi, rdi
+    jns .positive
 
-    ; Подсчитываем количество цифр
-    mov rax, rdi        ; копируем число
-    xor rcx, rcx        ; rcx = счётчик цифр
+    ; Отрицательное число
+    mov rsi, 1
+    neg rdi                     ; делаем положительным
 
-.count_digits:
-    inc rcx             ; увеличиваем счётчик
+.positive:
+    ; Преобразуем число в строку (в обратном порядке)
+    mov rbx, 10                 ; основание системы счисления
+    lea rcx, [rsp + 31]         ; конец буфера (32 байта)
+    mov byte [rcx], 0           ; null-терминатор
+
+.convert_loop:
+    dec rcx
     xor rdx, rdx
-    mov rbx, 10
-    div rbx             ; rax = rax / 10
+    div rbx                     ; rdx:rax / 10
+    add dl, '0'                 ; преобразуем в ASCII
+    mov [rcx], dl
     test rax, rax
-    jnz .count_digits
+    jnz .convert_loop
 
-    ; rcx = количество цифр
-    mov r13, rcx        ; сохраняем длину
+    ; Добавляем знак минус если нужно
+    test rsi, rsi
+    jz .no_neg
+    dec rcx
+    mov byte [rcx], '-'
 
-    ; Выделяем память под строку (длина + 1 для нуль-терминатора)
-    mov rax, 9          ; mmap
-    xor rdi, rdi
-    mov rsi, rcx
-    inc rsi             ; +1 для нуль-терминатора
-    mov rdx, 3          ; PROT_READ | PROT_WRITE
-    mov r10, 0x22       ; MAP_ANONYMOUS | MAP_PRIVATE
-    mov r8, -1
-    xor r9, r9
+.no_neg:
+    ; Вычисляем длину строки
+    mov rax, rsp                ; начало буфера
+    mov rdx, rsp
+    add rdx, 32                 ; конец буфера
+    sub rdx, rcx                ; длина строки с числом
+
+    ; Добавляем символ новой строки
+    mov byte [rcx + rdx], 10    ; помещаем '\n' после числа
+    inc rdx                     ; увеличиваем длину на 1
+
+    ; Системный вызов write
+    push rcx                    ; сохраняем указатель на начало строки
+    mov rax, 1                  ; sys_write
+    mov rdi, 1                  ; stdout
+    mov rsi, rcx                ; указатель на строку
+    ; rdx уже содержит длину
     syscall
+    pop rcx
 
-    ; rax = указатель на выделенную память
-    mov r14, rax        ; сохраняем указатель
-    mov r15, rax        ; r15 будет двигаться по строке
-    add r15, r13        ; идём с конца
-    dec r15             ; указываем на последний символ
+.end:
+    ; Освобождаем место в стеке
+    add rsp, 32
 
-    ; Заполняем строку цифрами (с конца)
-    mov rax, r12        ; восстанавливаем число
-
-.fill_digits:
-    xor rdx, rdx
-    mov rbx, 10
-    div rbx             ; rax = число / 10, rdx = остаток (цифра)
-
-    add dl, '0'         ; преобразуем в ASCII
-    mov [r15], dl       ; записываем цифру
-    dec r15             ; двигаемся влево
-
-    test rax, rax
-    jnz .fill_digits
-
-    ; Добавляем нуль-терминатор
-    mov byte [r14 + r13], 0
-
-    ; Возвращаем результат
-    mov rax, r14        ; указатель на строку
-    mov rbx, r13        ; длина строки
-
+    ; Восстанавливаем регистры
+    pop rdi
+    pop rsi
+    pop rdx
+    pop rcx
+    pop rbx
+    mov rsp, rbp
     pop rbp
     ret

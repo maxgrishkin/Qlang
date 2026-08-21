@@ -1,7 +1,6 @@
 #include "highCompiler.h"
 
 #include <fstream>
-#include <iostream>
 
 #include "HederCompiler.h"
 #include "Lexer.h"
@@ -20,6 +19,12 @@ std::vector<std::string> qlang::highCompiler::Compiling(const std::string &path,
 				Index = i;
 				break;
 			}
+			if (i == 0) {
+				break;
+			}
+		}
+		if (path[0] != '/') {
+			subPath = "./";
 		}
 		if (Index != -1) {
 			for (int i = 0;i <= Index;++i) {
@@ -33,7 +38,7 @@ std::vector<std::string> qlang::highCompiler::Compiling(const std::string &path,
 			}
 		}
 		else {
-			subPath = "./";
+			nameFile = path;
 		}
 	}
 	std::ifstream file(path);
@@ -161,7 +166,7 @@ std::vector<std::string> qlang::highCompiler::Compiling(const std::string &path,
 	OFile << res.otherFunks;
 	OFile.close();
 
-	system(("nasm -f elf64 " + nameFile + ".asm  -o " + nameFile + ".o").c_str());
+	system(("nasm -f elf64 -g " + nameFile + ".asm  -o " + nameFile + ".o").c_str());
 	oF.push_back(nameFile + ".o");
 	system(("rm " + nameFile + ".asm").c_str());
 
@@ -224,13 +229,11 @@ qlang::SectionsCode qlang::highCompiler::FunctionsAssignment(token::CODE &code) 
 
 	Compiler compiler = newCompiler(nameFunk,inputTypeFunk);
 	SectionsCode sections_code = compiler.Compiling(code);
-	if (args.size() > 6) {
-		sections_code.otherFunks = "sub rsp, " + std::to_string((args.size() - 6) * 8) + sections_code.otherFunks;
-	}
+
 	return SectionsCode{.externSection = "global " + Parser::FuncToManglingName(Functions.at(nameFunk)[inputTypeFunk]) + '\n',.data = sections_code.data, .otherFunks = Parser::FuncToManglingName(Functions.at(nameFunk)[inputTypeFunk]) + ":\n" + sections_code.code};
 }
 
-qlang::Argument qlang::highCompiler::ArgAssignment(token::CODE &code, const Compiler &compiler) {
+qlang::Argument qlang::highCompiler::ArgAssignment(token::CODE &code, const Compiler &compiler) const {
 	token::CODE code2;
 	for (;;) {
 		if (std::holds_alternative<token::Comma>(code[0].first) || std::holds_alternative<token::RPar>(code[0].first)) {
@@ -261,7 +264,7 @@ qlang::Argument qlang::highCompiler::ArgAssignment(token::CODE &code, const Comp
 	if (!std::holds_alternative<token::Identifier>(code2[0].first)) {
 		throw std::runtime_error("Unexpected token: " + token::TokenToString(code2[0].first) + ", at line " + std::to_string(code2[0].second.first) + ", at symbol " + std::to_string(code2[0].second.second) + ", expected Identifier");
 	}
-	std::string nameArg = std::get<token::Identifier>(code2[0].first).value;
+	const std::string nameArg = std::get<token::Identifier>(code2[0].first).value;
 	code2.erase(code2.begin()); //delete Identifier
 
 	if (!std::holds_alternative<token::Semicolon>(code2[0].first)) {

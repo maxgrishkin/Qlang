@@ -6,6 +6,10 @@
 
 qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 	SectionsCode res{.code = "", .data = ""};
+	if (ParentFunc.args.first.size() > 6) {
+		res.code += "sub rsp, " + std::to_string((ParentFunc.args.second.size() - 6) * 8) + '\n';
+		res.code += "mov rbp, rsp\n";
+	}
 
 	for (;;) {
 		bool breaker = false;
@@ -19,6 +23,9 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 			}
 			if (isFunk)
 			{
+				if (ParentFunc.args.first.size() > 6) {
+					res.code += "add rsp, " + std::to_string((ParentFunc.args.second.size() - 6) * 8) + '\n';
+				}
 				res.code += "ret\n";
 			}
 			code.erase(code.begin());
@@ -330,9 +337,15 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 						code.erase(code.begin());
 						res.code += val.code;
 					}
+					if (ParentFunc.args.first.size() > 6) {
+						res.code += "add rsp, " + std::to_string((ParentFunc.args.second.size() - 6) * 8) + '\n';
+					}
 					res.code += "ret\n";
+
+					//TODO ubrat govno code
 					Compiler compiler(Types,Functions,Variables,PseudoVariables,ParentFunc,typeReturn);
 					compiler.Compiling(code);
+
 					break;
 				}
 				default:

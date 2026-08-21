@@ -6,7 +6,7 @@
 
 int main() {
 	qlang::highCompiler hc;
-	const std::vector<std::string> objectFiles = hc.Compiling("./Test/Test.q");
+	std::vector<std::string> objectFiles = hc.Compiling("Test.q");
 	const int exitCode = TestObjectFiles(objectFiles);
 	std::cout << "\nProcess finished with exit code -> " << exitCode << "\n";
 }

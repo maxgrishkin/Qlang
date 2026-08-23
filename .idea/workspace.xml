@@ -37,17 +37,8 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="577a4689-4f42-479e-b873-79834eb29ecc" name="Changes" comment="fix many argument (v1.2.0)">
-      <change afterPath="$PROJECT_DIR$/lib/test/highCompilerTestSource/Case6.q" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/test/highCompilerTestSource/Case7.q" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/Compiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/Compiler.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/Compiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/Compiler.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/Lexer.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/Lexer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/Parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/Parser.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/highCompiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/highCompiler.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/token.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/token.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/test/highCompilerTest.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lib/test/highCompilerTest.cpp" afterDir="false" />
+    <list default="true" id="577a4689-4f42-479e-b873-79834eb29ecc" name="Changes" comment="add functions overload (v1.2.1)">
+      <change beforePath="$PROJECT_DIR$/lib/test/highCompilerTestSource/Case8.q" beforeDir="false" afterPath="$PROJECT_DIR$/lib/test/highCompilerTestSource/Case8.q" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -446,7 +437,7 @@
       <workItem from="1785812868119" duration="12000" />
       <workItem from="1785918528713" duration="1069000" />
       <workItem from="1787303511288" duration="1129000" />
-      <workItem from="1787308384813" duration="12491000" />
+      <workItem from="1787308384813" duration="14620000" />
     </task>
     <task id="LOCAL-00001" summary="Lexer">
       <option name="closed" value="true" />
@@ -560,7 +551,23 @@
       <option name="project" value="LOCAL" />
       <updated>1787317319840</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="add true/false (v1.2.1)">
+      <option name="closed" value="true" />
+      <created>1787460314943</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1787460314943</updated>
+    </task>
+    <task id="LOCAL-00016" summary="add functions overload (v1.2.1)">
+      <option name="closed" value="true" />
+      <created>1787463974953</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1787463974953</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -623,16 +630,13 @@
     <MESSAGE value="added include asm (v1.1.0)" />
     <MESSAGE value="added wrapper of function Compiling (v1.1.1)" />
     <MESSAGE value="fix many argument (v1.2.0)" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix many argument (v1.2.0)" />
+    <MESSAGE value="add true/false (v1.2.1)" />
+    <MESSAGE value="add functions overload (v1.2.1)" />
+    <option name="LAST_COMMIT_MESSAGE" value="add functions overload (v1.2.1)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/lib/src/Parser.cpp</url>
-          <line>240</line>
-          <option name="timeStamp" value="88" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/lib/src/Parser.cpp</url>
           <line>89</line>

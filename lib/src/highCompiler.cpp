@@ -208,24 +208,34 @@ qlang::SectionsCode qlang::highCompiler::FunctionsAssignment(token::CODE &code) 
 	code.erase(code.begin());
 
 
-	std::map<std::vector<const Type *>, const Type *, TypeComparator> TypeFunc;
+	std::pair<std::vector<const Type *>, const Type *> TypeFunc;
 	std::vector<const Type*> inputTypeFunk;
 	inputTypeFunk.reserve(args.size());
 	for (const auto& arg : args) {
 		inputTypeFunk.push_back(arg.type);
 	}
-	TypeFunc.emplace(inputTypeFunk,retTypeFunk);
+	TypeFunc = std::make_pair(inputTypeFunk,retTypeFunk);
 
-	std::map<std::vector<const Type*>,std::vector<std::string>> argsFunk;
+	std::pair<std::vector<const Type*>,std::vector<std::string>> argsFunk;
 	std::vector<std::string> inputNameArgFunk;
 	inputNameArgFunk.reserve(args.size());
 	for (const auto& arg : args) {
 		inputNameArgFunk.push_back(arg.name);
 	}
-	argsFunk.emplace(inputTypeFunk,inputNameArgFunk);
+	argsFunk = std::make_pair(inputTypeFunk,inputNameArgFunk);
 
-	Function function{.name = nameFunk, .TypeFunc = TypeFunc, .args = argsFunk};
-	Functions.emplace(nameFunk,function);
+
+	if (Functions.count(nameFunk) == 0) {
+		Function function{.name = nameFunk, .TypeFunc = {TypeFunc}, .args = {argsFunk}};
+		Functions.emplace(nameFunk,function);
+	}
+	else {
+		if (Functions[nameFunk].args.count(inputTypeFunk) == 1) { //if a function with the same arguments already exists
+			throw std::runtime_error("A function with the same arguments already exists");
+		}
+		Functions[nameFunk].args.emplace(argsFunk);
+		Functions[nameFunk].TypeFunc.emplace(TypeFunc);
+	}
 
 	Compiler compiler = newCompiler(nameFunk,inputTypeFunk);
 	SectionsCode sections_code = compiler.Compiling(code);

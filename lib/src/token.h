@@ -20,6 +20,8 @@ namespace qlang::token {
         CONTINUE,
         ELSE,
         INCLUDE,
+        TRUE,
+        FALSE,
     };
     struct LPar {};   // (
     struct RPar {};   // (
@@ -81,6 +83,8 @@ namespace qlang::token {
                         case Keyword::IN: return "in";
                         case Keyword::BREAK: return "break";
                         case Keyword::CONTINUE: return "continue";
+                        case Keyword::TRUE: return "true";
+                        case Keyword::FALSE: return "false";
                         default: ;
                     }
                     return "unknown keyword";

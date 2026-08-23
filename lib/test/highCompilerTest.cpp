@@ -34,3 +34,15 @@ TEST(highCompilerTest, Case5) {
 	std::vector<std::string> objectFiles = hc.Compiling("./highCompilerTestSource/Case5.q");
 	EXPECT_EQ(TestObjectFiles(objectFiles), 228);
 }
+
+TEST(highCompilerTest, Case6) {
+	qlang::highCompiler hc;
+	std::vector<std::string> objectFiles = hc.Compiling("./highCompilerTestSource/Case6.q");
+	EXPECT_EQ(TestObjectFiles(objectFiles), 228);
+}
+
+TEST(highCompilerTest, Case7) {
+	qlang::highCompiler hc;
+	std::vector<std::string> objectFiles = hc.Compiling("./highCompilerTestSource/Case7.q");
+	EXPECT_EQ(TestObjectFiles(objectFiles), 228);
+}

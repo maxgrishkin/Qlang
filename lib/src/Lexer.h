@@ -302,6 +302,8 @@ namespace qlang::Lexer{
 							{"continue",token::Keyword::CONTINUE},
 							{"else",token::Keyword::ELSE},
 							{"include",token::Keyword::INCLUDE},
+							{"true",token::Keyword::TRUE},
+							{"false",token::Keyword::FALSE},
 						};
 						if (auto keyword = Keywords.find(text); keyword != Keywords.end()) {
 							result.emplace_back(std::make_pair(keyword->second,std::make_pair(line,preSymbol)));

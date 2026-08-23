@@ -59,8 +59,8 @@ namespace qlang {
 			LessOrEqualIntOperator = BinaryOperator{.TypeOper = TypeOpers2,.asmCode = {{ &Types["int"], "cmp rax, rbx\nsetle bl\nmovzx rax, bl\n"}}};
 			GreatOrEqualIntOperator = BinaryOperator{.TypeOper = TypeOpers2,.asmCode = {{ &Types["int"], "cmp rax, rbx\nsetge bl\nmovzx rax, bl\n"}}};
 
-			EqualIntOperator = BinaryOperator{.TypeOper = TypeOpers3,.asmCode = {{ &Types["bool"], "cmp rax, rbx\nsete bl\nmovzx rax, bl\n"}}};
-			NotEqualIntOperator = BinaryOperator{.TypeOper = TypeOpers3,.asmCode = {{ &Types["bool"], "cmp rax, rbx\nsetne bl\nmovzx rax, bl\n"}}};
+			EqualBoolOperator = BinaryOperator{.TypeOper = TypeOpers3,.asmCode = {{ &Types["bool"], "cmp rax, rbx\nsete bl\nmovzx rax, bl\n"}}};
+			NotEqualBoolOperator = BinaryOperator{.TypeOper = TypeOpers3,.asmCode = {{ &Types["bool"], "cmp rax, rbx\nsetne bl\nmovzx rax, bl\n"}}};
 
 			EqualCharOperator = BinaryOperator{.TypeOper = TypeOpers4,.asmCode = {{ &Types["char"], "cmp rax, rbx\nsete bl\nmovzx rax, bl\n"}}};
 			NotEqualCharOperator = BinaryOperator{.TypeOper = TypeOpers4,.asmCode = {{ &Types["char"], "cmp rax, rbx\nsetne bl\nmovzx rax, bl\n"}}};

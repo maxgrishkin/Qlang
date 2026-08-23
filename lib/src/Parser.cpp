@@ -12,7 +12,18 @@ qlang::Value qlang::Parser::ParseExpression(token::CODE& code, int left_binding_
 			},
 			[&](token::Integer Integer) -> Value {
 				code.erase(code.begin());
-				return Value{.code = "mov rax," + std::to_string(Integer.value) + '\n',.type =  &compiler->getTypes().at("int")};
+				return Value{.code = "mov rax," + std::to_string(Integer.value) + '\n',.type = &compiler->getTypes().at("int")};
+			},
+			[&](token::Keyword keyword) -> Value {
+				code.erase(code.begin());
+				switch (keyword) {
+					case token::Keyword::TRUE:
+						return Value{.code = "mov rax, 1\n",.type = &compiler->getTypes().at("bool")};
+					case token::Keyword::FALSE:
+						return Value{.code = "mov rax, 0\n",.type = &compiler->getTypes().at("bool")};
+					default:
+						throw std::runtime_error("Unexpected keyword: " + token::TokenToString(keyword) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second));
+				}
 			},
 			[&](token::Char Char) -> Value {
 				code.erase(code.begin());

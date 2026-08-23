@@ -37,17 +37,17 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="577a4689-4f42-479e-b873-79834eb29ecc" name="Changes" comment="added wrapper of function Compiling (v1.1.1)">
-      <change afterPath="$PROJECT_DIR$/lib/test/highCompilerTestSource/Case5.q" afterDir="false" />
+    <list default="true" id="577a4689-4f42-479e-b873-79834eb29ecc" name="Changes" comment="fix many argument (v1.2.0)">
+      <change afterPath="$PROJECT_DIR$/lib/test/highCompilerTestSource/Case6.q" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/test/highCompilerTestSource/Case7.q" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/Print.asm" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Print.asm" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/Test.q" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Test.q" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/Compiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/Compiler.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/Compiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/Compiler.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/Lexer.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/Lexer.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/Parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/Parser.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/highCompiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/highCompiler.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/highCompiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/highCompiler.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/token.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/token.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/test/highCompilerTest.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lib/test/highCompilerTest.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -169,12 +169,127 @@
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///home/maximgrishin/CLionProjects/qLang/lib/src/Compiler.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib/src/Compiler.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///home/maximgrishin/CLionProjects/qLang/lib/src/Compiler.h" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///home/maximgrishin/CLionProjects/qLang/lib/src/Lexer.h" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///home/maximgrishin/CLionProjects/qLang/lib/src/Parser.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib/src/Parser.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="mock:///home/maximgrishin/CLionProjects/qLang/lib/src/highCompiler.h" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///home/maximgrishin/CLionProjects/qLang/lib/src/highCompiler.h" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib/src/token.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///home/maximgrishin/CLionProjects/qLang/lib/src/token.h" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib/test/TestASM.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///home/maximgrishin/CLionProjects/qLang/lib/test/highCompilerTest.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///home/maximgrishin/CLionProjects/qLang/lib/test/highCompilerTest.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///home/maximgrishin/CLionProjects/qLang/lib/test/highCompilerTest.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///home/maximgrishin/CLionProjects/qLang/main.cpp" root0="SKIP_HIGHLIGHTING" />
@@ -212,6 +327,7 @@
     "Google Test.highCompilerTest.Case1.executor": "Run",
     "Google Test.highCompilerTest.Case2.executor": "Debug",
     "Google Test.highCompilerTest.Case3.executor": "Run",
+    "Google Test.highCompilerTest.Case6.executor": "Run",
     "Google Test.qLang.executor": "Run",
     "Google Test.qlang_test.executor": "Run",
     "Google Test.qlang_tests.executor": "Debug",
@@ -243,7 +359,7 @@
       <recent name="$PROJECT_DIR$/Test" />
     </key>
   </component>
-  <component name="RunManager" selected="CMake Application.qlang">
+  <component name="RunManager" selected="Google Test.qlang_test">
     <configuration name="qlang_test" type="CMakeGoogleTestRunConfigurationType" factoryName="Google Test" PROGRAM_PARAMS="--gtest_catch_exceptions=0" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" WORKING_DIR="file://$PROJECT_DIR$/lib/test/" PASS_PARENT_ENVS_2="true" PROJECT_NAME="qLang" TARGET_NAME="qlang_test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="qLang" RUN_TARGET_NAME="qlang_test" TEST_MODE="SUITE_TEST">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -330,7 +446,7 @@
       <workItem from="1785812868119" duration="12000" />
       <workItem from="1785918528713" duration="1069000" />
       <workItem from="1787303511288" duration="1129000" />
-      <workItem from="1787308384813" duration="7933000" />
+      <workItem from="1787308384813" duration="12491000" />
     </task>
     <task id="LOCAL-00001" summary="Lexer">
       <option name="closed" value="true" />
@@ -436,7 +552,15 @@
       <option name="project" value="LOCAL" />
       <updated>1784574589109</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="fix many argument (v1.2.0)">
+      <option name="closed" value="true" />
+      <created>1787317319840</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1787317319840</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -448,6 +572,21 @@
     <isAutomaticReloadCMake value="true" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="HEAD" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
@@ -483,20 +622,31 @@
     <MESSAGE value="added char processing (v1.0.1)" />
     <MESSAGE value="added include asm (v1.1.0)" />
     <MESSAGE value="added wrapper of function Compiling (v1.1.1)" />
-    <option name="LAST_COMMIT_MESSAGE" value="added wrapper of function Compiling (v1.1.1)" />
+    <MESSAGE value="fix many argument (v1.2.0)" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix many argument (v1.2.0)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/lib/src/Parser.cpp</url>
-          <line>229</line>
+          <line>240</line>
           <option name="timeStamp" value="88" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/lib/src/Compiler.cpp</url>
-          <line>7</line>
-          <option name="timeStamp" value="90" />
+          <url>file://$PROJECT_DIR$/lib/src/Parser.cpp</url>
+          <line>89</line>
+          <option name="timeStamp" value="96" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/lib/src/Parser.cpp</url>
+          <line>117</line>
+          <option name="timeStamp" value="99" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/lib/src/Parser.cpp</url>
+          <line>71</line>
+          <option name="timeStamp" value="102" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

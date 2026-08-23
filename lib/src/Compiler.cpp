@@ -342,8 +342,7 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 					}
 					res.code += "ret\n";
 
-					//TODO ubrat govno code
-					Compiler compiler(Types,Functions,Variables,PseudoVariables,ParentFunc,typeReturn);
+					Compiler compiler(Types,Functions,Variables,PseudoVariables,ParentFunc,typeReturn,false,false);
 					compiler.Compiling(code);
 
 					break;

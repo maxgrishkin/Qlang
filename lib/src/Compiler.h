@@ -26,8 +26,8 @@ namespace qlang{
 		const std::vector<std::string> &PseudoVariables,
 		const SpecificFunction &ParentFunc,
 		Type* typeReturn,
-		const bool isMustReturn = false,
-		const bool isFunk = true) :
+		const bool isMustReturn,
+		const bool isFunk) :
 		Types(Types), Functions(Functions), Variables(Variables), PseudoVariables(PseudoVariables), ParentFunc(ParentFunc), isMustReturn(isMustReturn), isFunk(isFunk), typeReturn(typeReturn) {}
 
 	public:

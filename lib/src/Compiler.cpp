@@ -23,6 +23,10 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 			}
 			if (isFunk)
 			{
+				if (!AntiLabels.empty()) {
+					auto antiLabel = *AntiLabels.begin();
+					throw std::runtime_error("Label: " + antiLabel.first + " is mising, at line " + std::to_string(antiLabel.second.first) + ", at symbol " +  std::to_string(antiLabel.second.second));
+				}
 				if (ParentFunc.args.first.size() > 6) {
 					res.code += "add rsp, " + std::to_string((ParentFunc.args.second.size() - 6) * 8) + '\n';
 				}
@@ -43,7 +47,7 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 			code.erase(code.begin());
 			breaker = true;
 		},
-		[&code, this, &res](token::Identifier)  {
+		[&code, this, &res](token::Identifier identifier)  {
 			if (std::holds_alternative<token::LPar>(code[1].first)) {
 				//function call
 				const Parser parser(this);
@@ -52,6 +56,17 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 					throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected Semicolon");
 				}
 				code.erase(code.begin());
+				return;
+			}
+			if (std::holds_alternative<token::Colon>(code[1].first)) {
+				//label assignment
+				code.erase(code.begin());
+				code.erase(code.begin());
+				Labels.push_back(identifier.value);
+				res.code += '.' + identifier.value + ":\n";
+				if (AntiLabels.count(identifier.value) == 1) {
+					AntiLabels.erase(identifier.value);
+				}
 				return;
 			}
 			//variable definition
@@ -66,6 +81,21 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 					SectionsCode var = VariableAssignment(code);
 					res.code += var.code;
 					res.data += var.data;
+					break;
+				}
+				case token::Keyword::GOTO: {
+					if (!std::holds_alternative<token::Identifier>(code[0].first)) {
+						throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected Identifier");
+					}
+					if (std::find(Labels.begin(),Labels.end(),std::get<token::Identifier>(code[0].first).value) == Labels.end()) {
+						AntiLabels.emplace(std::get<token::Identifier>(code[0].first).value, code[0].second);
+					}
+					res.code += "jmp ." + std::get<token::Identifier>(code[0].first).value + '\n';
+					code.erase(code.begin());
+					if (!std::holds_alternative<token::Semicolon>(code[0].first)) {
+						throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected Semicolon");
+					}
+					code.erase(code.begin());
 					break;
 				}
 				case token::Keyword::IF: {
@@ -112,8 +142,14 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 						throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected LCurlyBracket");
 					}
 					code.erase(code.begin());
-					Compiler ifCompiler(Types,Functions,Variables,PseudoVariables,ParentFunc,typeReturn,false, false);
+					Compiler ifCompiler(Types,Functions,Variables,PseudoVariables,Labels,ParentFunc,typeReturn,countIf,false,false);
 					SectionsCode ifSectionsCode = ifCompiler.Compiling(code);
+					for (const auto& it : ifCompiler.getAntiLabels()) {
+						AntiLabels.emplace(it);
+					}
+					for (const auto& it : ifCompiler.getLabels()) {
+						Labels.push_back(it);
+					}
 					res.data += ifSectionsCode.data;
 					res.code += val.code;
 					res.code += "cmp rax, 1\n";
@@ -164,8 +200,14 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 						throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected LCurlyBracket");
 					}
 					code.erase(code.begin());
-					Compiler whileCompiler(Types,Functions,Variables,PseudoVariables,ParentFunc,typeReturn,false, false);
+					Compiler whileCompiler(Types,Functions,Variables,PseudoVariables,Labels,ParentFunc,typeReturn,countIf,false,false);
 					SectionsCode whileSectionsCode = whileCompiler.Compiling(code);
+					for (const auto& it : whileCompiler.getAntiLabels()) {
+						AntiLabels.emplace(it);
+					}
+					for (const auto& it : whileCompiler.getLabels()) {
+						Labels.push_back(it);
+					}
 					res.data += whileSectionsCode.data;
 
 					res.code += val.code;
@@ -294,8 +336,14 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 					}
 					code.erase(code.begin());
 
-					Compiler forCompiler(Types,Functions,Variables,PseudoVariables,ParentFunc,typeReturn,false, false);
+					Compiler forCompiler(Types,Functions,Variables,PseudoVariables,Labels,ParentFunc,typeReturn,countIf,false,false);
 					SectionsCode forSectionsCode = forCompiler.Compiling(code);
+					for (const auto& it : forCompiler.getAntiLabels()) {
+						AntiLabels.emplace(it);
+					}
+					for (const auto& it : forCompiler.getLabels()) {
+						Labels.push_back(it);
+					}
 					res.data += forSectionsCode.data;
 
 					res.code += val.code;
@@ -342,7 +390,7 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 					}
 					res.code += "ret\n";
 
-					Compiler compiler(Types,Functions,Variables,PseudoVariables,ParentFunc,typeReturn,false,false);
+					Compiler compiler(Types,Functions,Variables,PseudoVariables,Labels,ParentFunc,typeReturn,countIf,false,false);
 					compiler.Compiling(code);
 
 					break;

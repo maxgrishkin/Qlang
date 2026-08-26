@@ -98,6 +98,10 @@ namespace qlang::Lexer{
 					result.emplace_back(std::make_pair(token::Semicolon{},std::make_pair(line,symbol)));
 					symbol++;
 					break;
+				case ':':
+					result.emplace_back(std::make_pair(token::Colon{},std::make_pair(line,symbol)));
+					symbol++;
+					break;
 				case '+':
 					if (i != code_length - 1) {
 						if (code[i+1] == '+') {
@@ -293,6 +297,7 @@ namespace qlang::Lexer{
 							{"fn",token::Keyword::FN},
 							{"var",token::Keyword::VAR},
 							{"return",token::Keyword::RETURN},
+							{"goto",token::Keyword::GOTO},
 							{"if",token::Keyword::IF},
 							{"for",token::Keyword::FOR},
 							{"while",token::Keyword::WHILE},
@@ -324,7 +329,7 @@ namespace qlang::Lexer{
 						break;
 					}
 					std::string character = {code[i]};
-					throw std::runtime_error("Unexpected character : " + character + ", at line " + std::to_string(line) + ", at symbol " + std::to_string(symbol));
+					throw std::runtime_error("Unexpected character: " + character + ", at line " + std::to_string(line) + ", at symbol " + std::to_string(symbol));
 				}
 			}
 		}

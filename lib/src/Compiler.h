@@ -13,6 +13,8 @@ namespace qlang{
 		std::map<std::string,Function> Functions;
 		std::map<std::string,Variable> Variables;
 		std::vector<std::string> PseudoVariables; //deleted variable
+		std::vector<std::string> Labels;
+		std::map<std::string, std::pair<unsigned int,unsigned short>> AntiLabels; //pair of name of label and location of label
 		SpecificFunction ParentFunc;
 		bool isMustReturn = true;
 		bool isFunk = true;
@@ -24,11 +26,13 @@ namespace qlang{
 		const std::map<std::string,Function> &Functions,
 		const std::map<std::string,Variable> &Variables,
 		const std::vector<std::string> &PseudoVariables,
-		const SpecificFunction &ParentFunc,
+		const std::vector<std::string> &Labels,
+		SpecificFunction ParentFunc,
 		Type* typeReturn,
+		unsigned int countIf,
 		const bool isMustReturn,
 		const bool isFunk) :
-		Types(Types), Functions(Functions), Variables(Variables), PseudoVariables(PseudoVariables), ParentFunc(ParentFunc), isMustReturn(isMustReturn), isFunk(isFunk), typeReturn(typeReturn) {}
+		Types(Types), Functions(Functions), Variables(Variables), PseudoVariables(PseudoVariables), Labels(Labels), ParentFunc(std::move(ParentFunc)), isMustReturn(isMustReturn), countIf(countIf), isFunk(isFunk), typeReturn(typeReturn) {}
 
 	public:
 		Compiler(const std::map<std::string,Type> &Types,
@@ -61,6 +65,12 @@ namespace qlang{
 		}
 		[[nodiscard]] SpecificFunction getParentFunc() const {
 			return ParentFunc;
+		}
+		[[nodiscard]] const std::vector<std::string>& getLabels() const {
+			return Labels;
+		}
+		[[nodiscard]] const std::map<std::string, std::pair<unsigned int,unsigned short>>& getAntiLabels() const {
+			return AntiLabels;
 		}
 
 		const Type* take_type(token::CODE& code) const {

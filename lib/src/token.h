@@ -11,6 +11,7 @@ namespace qlang::token {
         FN,
         VAR,
         RETURN,
+        GOTO,
         IF,
         FOR,
         WHILE,
@@ -34,6 +35,7 @@ namespace qlang::token {
     struct LAngleBracketEqual {};   // <=
     struct RAngleBracketEqual {};   // >=
     struct Semicolon {};   // ;
+    struct Colon {};   // :
     struct Plus {};   // +
     struct Minus {};   // -
     struct Asterisk {};   // *
@@ -61,7 +63,7 @@ namespace qlang::token {
     };
 
     using Any = std::variant<
-    Keyword, LPar, RPar, Equal, Equal2, LCurlyBracket, RCurlyBracket, Semicolon, Comma, Plus, Minus, Asterisk, Slash, Identifier,
+    Keyword, LPar, RPar, Equal, Equal2, LCurlyBracket, RCurlyBracket, Semicolon, Colon, Comma, Plus, Minus, Asterisk, Slash, Identifier,
     Integer, String,LSquareBracket,RSquareBracket,LAngleBracket,RAngleBracket,LAngleBracketEqual,RAngleBracketEqual,PlusPlus,MinusMinus,
     NoEqual,Char,Dot,Hash,Percent>;
 
@@ -75,6 +77,7 @@ namespace qlang::token {
                         case Keyword::FN: return "fn";
                         case Keyword::VAR: return "var";
                         case Keyword::RETURN: return "return";
+                        case Keyword::GOTO: return "goto";
                         case Keyword::IF: return "if";
                         case Keyword::ELSE: return "else";
                         case Keyword::FOR: return "for";
@@ -96,6 +99,7 @@ namespace qlang::token {
                 [](LSquareBracket)-> std::string  { return "["; },
                 [](RSquareBracket)-> std::string  { return "]"; },
                 [](Semicolon)-> std::string  { return ";"; },
+                [](Colon)-> std::string  { return ":"; },
                 [](Plus)-> std::string  { return "+"; },
                 [](Minus)-> std::string  { return "-"; },
                 [](Asterisk)-> std::string  { return "*"; },

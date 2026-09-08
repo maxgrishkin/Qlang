@@ -24,7 +24,7 @@ namespace qlang{
 		static std::string VarToManglingName(const Variable& var) {
 			std::string res = FuncToManglingName(var.ParentFunc);
 
-			res += '_' + std::to_string(var.name.size()) + var.name;
+			res += '_' + std::to_string(var.type->type.size()) + var.type->type + '_' + std::to_string(var.name.size()) + var.name;
 			return res;
 		}
 

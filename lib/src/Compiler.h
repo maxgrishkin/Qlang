@@ -12,7 +12,8 @@ namespace qlang{
 		std::map<std::string,Type> Types;
 		std::map<std::string,Function> Functions;
 		std::map<std::string,Variable> Variables;
-		std::vector<std::string> PseudoVariables; //deleted variable
+		std::map<std::string,Variable> LocalVariables;
+		std::map<std::string,Variable> PseudoVariables; //deleted variable
 		std::vector<std::string> Labels;
 		std::map<std::string, std::pair<unsigned int,unsigned short>> AntiLabels; //pair of name of label and location of label
 		SpecificFunction ParentFunc;
@@ -25,7 +26,7 @@ namespace qlang{
 		Compiler(const std::map<std::string,Type> &Types,
 		const std::map<std::string,Function> &Functions,
 		const std::map<std::string,Variable> &Variables,
-		const std::vector<std::string> &PseudoVariables,
+		const std::map<std::string,Variable> &PseudoVariables,
 		const std::vector<std::string> &Labels,
 		SpecificFunction ParentFunc,
 		Type* typeReturn,
@@ -46,7 +47,7 @@ namespace qlang{
 		SectionsCode Compiling(token::CODE& code);
 		SectionsCode VariableDefinition(token::CODE& code);
 		SectionsCode VariableAssignment(token::CODE& code);
-		void DeleteVariable(const std::string& name);
+		void DeleteVariable(const std::pair<std::string,Variable>& var);
 
 		[[nodiscard]] const std::map<std::string, Type>& getTypes() const {
 			return Types;
@@ -57,7 +58,7 @@ namespace qlang{
 		[[nodiscard]] const std::map<std::string,Variable>& getVariables() const {
 			return Variables;
 		}
-		[[nodiscard]] const std::vector<std::string>& getPseudoVariables() const {
+		[[nodiscard]] const std::map<std::string,Variable>& getPseudoVariables() const {
 			return PseudoVariables;
 		}
 		[[nodiscard]] bool getIsReturns() const{

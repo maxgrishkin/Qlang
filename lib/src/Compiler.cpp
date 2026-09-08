@@ -33,12 +33,7 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 				res.code += "ret\n";
 			}
 			code.erase(code.begin());
-			std::vector<std::string> varsNames;
-			varsNames.reserve(Variables.size());
-			for (const auto& var : Variables) {
-				varsNames.push_back(var.first);
-			}
-			for (const auto& var : varsNames) {
+			for (const auto& var : LocalVariables) {
 				DeleteVariable(var);
 			}
 			breaker = true;
@@ -150,6 +145,9 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 					for (const auto& it : ifCompiler.getLabels()) {
 						Labels.push_back(it);
 					}
+					for (const auto& it : ifCompiler.getPseudoVariables()) {
+						PseudoVariables.emplace(it);
+					}
 					res.data += ifSectionsCode.data;
 					res.code += val.code;
 					res.code += "cmp rax, 1\n";
@@ -207,6 +205,9 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 					}
 					for (const auto& it : whileCompiler.getLabels()) {
 						Labels.push_back(it);
+					}
+					for (const auto& it : whileCompiler.getPseudoVariables()) {
+						PseudoVariables.emplace(it);
 					}
 					res.data += whileSectionsCode.data;
 
@@ -344,6 +345,9 @@ qlang::SectionsCode qlang::Compiler::Compiling(token::CODE& code) {
 					for (const auto& it : forCompiler.getLabels()) {
 						Labels.push_back(it);
 					}
+					for (const auto& it : forCompiler.getPseudoVariables()) {
+						PseudoVariables.emplace(it);
+					}
 					res.data += forSectionsCode.data;
 
 					res.code += val.code;
@@ -447,15 +451,21 @@ qlang::SectionsCode qlang::Compiler::VariableAssignment(token::CODE &code) {
 	code.erase(code.begin()); //delete Identifier
 	const std::string nameVar = Parser::VarToManglingName(var);
 
-	if (std::find(PseudoVariables.begin(),PseudoVariables.end(),nameVar) == PseudoVariables.end()) {
-		res.data += nameVar + " resq 1\n";
+	if (PseudoVariables.find(var.name) != PseudoVariables.end()) {
+		if (PseudoVariables.find(var.name)->second.type->type == typeVar->type) {
+			PseudoVariables.erase(PseudoVariables.find(nameVar)->first);
+		}
+		else {
+			goto data;
+		}
 	}
 	else {
-		PseudoVariables.erase(std::remove(PseudoVariables.begin(), PseudoVariables.end(), nameVar), PseudoVariables.end());
+		data:
+		res.data += nameVar + " resq 1\n";
 	}
 
 	Variables.emplace(var.name, var);
-	PseudoVariables.push_back(var.name);
+	LocalVariables.emplace(var.name, var);
 
 	if (std::holds_alternative<token::Equal>(code[0].first)) {
 		code.erase(code.begin());
@@ -481,7 +491,7 @@ qlang::SectionsCode qlang::Compiler::VariableAssignment(token::CODE &code) {
 	throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second));
 }
 
-void qlang::Compiler::DeleteVariable(const std::string& name) {
-	PseudoVariables.push_back(name);
-	Variables.erase(name);
+void qlang::Compiler::DeleteVariable(const std::pair<std::string,Variable>& var) {
+	PseudoVariables.emplace(var);
+	Variables.erase(var.first);
 }

@@ -88,9 +88,9 @@ namespace qlang {
 				{"!=",&NotEqualCharOperator},
 			};
 
-			Types["int"].operators = intOperators;
-			Types["bool"].operators = boolOperators;
-			Types["char"].operators = charOperators;
+			Types["int"].binaryOperators = intOperators;
+			Types["bool"].binaryOperators = boolOperators;
+			Types["char"].binaryOperators = charOperators;
 		}
 
 		[[nodiscard]] Compiler newCompiler(const std::string& nameFunc, const std::vector<const Type*>& input = {}) const {
@@ -98,14 +98,11 @@ namespace qlang {
 			return compiler;
 		}
 
-		std::vector<std::string> Compiling(const std::string& path) {
-			return Compiling(path, true);
-		}
-		std::vector<std::string> Compiling(const std::string& path, bool Main);
+		std::vector<std::string> Compiling(const std::string& path, bool Main = true);
 
 		SectionsCode FunctionsAssignment(token::CODE& code);
 
-		void MakeMain() {
+		void MakeMain() { //function for only tests
 			Function Main{.name = "main"};
 			std::vector<const Type*> inputMain = {};
 			std::vector<std::string> inputArgMain = {};
@@ -122,6 +119,9 @@ namespace qlang {
 		}
 		[[nodiscard]] const std::map<std::string,Variable>& getVariables() const {
 			return Variables;
+		}
+		[[nodiscard]] Context getContext() const {
+			return Context{.Types = Types,.Functions = Functions,.Variables = Variables};
 		}
 	};
 }

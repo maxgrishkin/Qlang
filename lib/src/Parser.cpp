@@ -50,8 +50,8 @@ qlang::Value qlang::Parser::ParseExpression(token::CODE& code, int left_binding_
 		const unsigned int symbol = code[0].second.second;
 		code.erase(code.begin());
 		auto val = ParseExpression(code,rbp + static_cast<int>(leftAssociativity));
-		auto typeOper = lType->operators.find(_operator);
-		if (typeOper == lType->operators.end())
+		auto typeOper = lType->binaryOperators.find(_operator);
+		if (typeOper == lType->binaryOperators.end())
 			throw std::runtime_error("This operator not exists, at line " + std::to_string(line) + ", at symbol " + std::to_string(symbol));
 		std::string resStr = "push rax\n";
 		resStr += val.code;

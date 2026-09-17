@@ -62,6 +62,7 @@ std::vector<std::string> qlang::highCompiler::Compiling(const std::string &path,
 		    			SectionsCode funk = FunctionsAssignment(code);
 		    			res.data += funk.data;
 		    			res.otherFunks += funk.otherFunks;
+		    			res.externSection += funk.externSection;
 		    			break;
 		    		}
 		    		default:
@@ -92,10 +93,20 @@ std::vector<std::string> qlang::highCompiler::Compiling(const std::string &path,
 							code.erase(code.begin());
 							if (!(IncludeFile[IncludeFile.size() - 4] == '.' &&
 							IncludeFile[IncludeFile.size() - 3] == 'h' &&
-							IncludeFile[IncludeFile.size() - 2] == 'e' && IncludeFile[IncludeFile.size() - 1] == 'd'))
+							IncludeFile[IncludeFile.size() - 2] == 'e' &&
+							IncludeFile[IncludeFile.size() - 1] == 'd'))
 							{
 								throw std::runtime_error("Unexpected file extension, at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected LAngleBracket");
 							}
+							if (!std::holds_alternative<token::Dot>(code[0].first)) {
+								throw std::runtime_error("Unexpected token:" + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected Dot");
+							}
+							code.erase(code.begin());
+							if (!std::holds_alternative<token::Identifier>(code[0].first)) {
+								throw std::runtime_error("Unexpected token:" + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + ", expected Identifier");
+							}
+							std::string target = std::get<token::Identifier>(code[0].first).value;
+							code.erase(code.begin());
 
 							std::ifstream file(subPath + IncludeFile);
 							if (!file.is_open()) {
@@ -105,7 +116,7 @@ std::vector<std::string> qlang::highCompiler::Compiling(const std::string &path,
 												 std::istreambuf_iterator<char>());
 							token::CODE headerCode = Lexer::Lex(strCode);
 							HederCompiler heder_compiler(Types);
-							auto heders = heder_compiler.Compiling(subPath,headerCode);
+							auto heders = heder_compiler.Compiling(subPath,headerCode,target);
 							for (const auto& heder : heders.first) {
 								oF.push_back(heder);
 							}
@@ -128,6 +139,7 @@ std::vector<std::string> qlang::highCompiler::Compiling(const std::string &path,
 								Functions.emplace(func2);
 							}
 							for (const auto& var : heders.second.Variables) {
+								res.externSection += "extern " + Parser::VarToManglingName(var.second) + '\n';
 								Variables.emplace(var);
 								Variables[var.first].type = &Types[Variables[var.first].type->type];
 							}
@@ -150,18 +162,20 @@ std::vector<std::string> qlang::highCompiler::Compiling(const std::string &path,
 	}
 
 	std::vector<const Type*> argMain;
-	for (const auto& args : Functions.at("main").TypeFunc) {
-		argMain = args.first;
-		break;
-	}
+	if (Main)
+	{
+		for (const auto& args : Functions.at("main").TypeFunc) {
+			argMain = args.first;
+			break;
+		}
 
-	if (Main) {
 		OFile << "global _start\n";
 	}
 	OFile << res.externSection;
 	OFile << "section .bss\n" + res.data;
+	OFile << "section .text\n";
 	if (Main) {
-		OFile << "section .text\n_start:\ncall " + Parser::FuncToManglingName(Functions.at("main")[argMain]) + "\nmov rdi, rax\nmov rax, 60\nsyscall\n";
+		OFile << "_start:\ncall " + Parser::FuncToManglingName(Functions.at("main")[argMain]) + "\nmov rdi, rax\nmov rax, 60\nsyscall\n";
 	}
 	OFile << res.otherFunks;
 	OFile.close();
@@ -230,7 +244,7 @@ qlang::SectionsCode qlang::highCompiler::FunctionsAssignment(token::CODE &code) 
 		Functions.emplace(nameFunk,function);
 	}
 	else {
-		if (Functions[nameFunk].args.count(inputTypeFunk) == 1) { //if a function with the same arguments already exists
+		if (Functions[nameFunk].args.count(inputTypeFunk) == 1) {
 			throw std::runtime_error("A function with the same arguments already exists");
 		}
 		Functions[nameFunk].args.emplace(argsFunk);

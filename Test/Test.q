@@ -1,8 +1,9 @@
-#include<Test.hed>
+#include<Test.hed>.print
+#include<Test.hed>.fib
 
 fn int main()
 {
-    print();
+    print(fib(40));
 
     return 0;
 }

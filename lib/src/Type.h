@@ -8,12 +8,15 @@
 
 namespace qlang{
 	struct BinaryOperator;
+	struct UnaryOperator;
 	struct Variable;
 
-	struct  Type {
+	struct Type {
 		const std::string type;
 		std::vector<Variable*> Fields;
-		std::map<std::string,BinaryOperator*> operators;
+		std::map<std::string,BinaryOperator*> binaryOperators;
+		std::map<std::string,UnaryOperator*> prefixOperators;
+		std::map<std::string,UnaryOperator*> postfixOperators;
 	};
 
 	struct TypeComparator {
@@ -132,6 +135,11 @@ namespace qlang{
 
 	struct BinaryOperator {
 		std::map<const Type*,const Type*,TypeComparator> TypeOper;
+		std::map<const Type*,std::string,TypeComparator> asmCode;
+	};
+
+	struct UnaryOperator {
+		const Type* TypeOper;
 		std::map<const Type*,std::string,TypeComparator> asmCode;
 	};
 

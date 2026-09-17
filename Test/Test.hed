@@ -1,1 +1,7 @@
-.asm(Print.asm,fn void print(int));
+print = {
+    .asm(Print.asm,fn void print(int));
+}
+
+fib = {
+    .qlang(fib.q);
+}

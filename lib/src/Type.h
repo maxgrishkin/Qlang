@@ -162,16 +162,18 @@ namespace qlang{
 	};
 
 	inline std::map<token::Any,int> operatorsPower = {
-		{token::Equal2{},1},
-		{token::NoEqual{},1},
-		{token::LAngleBracket{},1},
-		{token::RAngleBracket{},1},
-		{token::LAngleBracketEqual{},1},
-		{token::RAngleBracketEqual{},1},
-		{token::Plus{},2},
-		{token::Minus{},2},
-		{token::Asterisk{},3},
-		{token::Slash{},3},
-		{token::Percent{},3},
+		{token::OR{},1},
+		{token::AND{},1},
+		{token::Equal2{},2},
+		{token::NoEqual{},2},
+		{token::LAngleBracket{},2},
+		{token::RAngleBracket{},2},
+		{token::LAngleBracketEqual{},2},
+		{token::RAngleBracketEqual{},2},
+		{token::Plus{},3},
+		{token::Minus{},3},
+		{token::Asterisk{},4},
+		{token::Slash{},4},
+		{token::Percent{},4},
 	};
 }

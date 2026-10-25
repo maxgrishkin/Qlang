@@ -95,7 +95,15 @@ inline int TestObjectFiles(const std::vector<std::string>& objectFiles) {
 	}
 	system(command.c_str());
 
+	command = "rm -f";
+	for (const auto& object : objectFiles) {
+		command += ' ' + object;
+	}
+	system(command.c_str());
+
 	const int status = system("./test");
+
+	system("rm -f test");
 
 	int exit_code = -1;
 	if (status != -1) {
@@ -104,10 +112,5 @@ inline int TestObjectFiles(const std::vector<std::string>& objectFiles) {
 		}
 	}
 
-	command = "rm -f test";
-	for (const auto& object : objectFiles) {
-		command += ' ' + object;
-	}
-	system(command.c_str());
 	return exit_code;
 }

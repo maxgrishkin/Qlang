@@ -37,18 +37,23 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="577a4689-4f42-479e-b873-79834eb29ecc" name="Changes" comment="fix logic variables with identical names (v1.3.2)">
-      <change afterPath="$PROJECT_DIR$/Test/fib.q" afterDir="false" />
+    <list default="true" id="577a4689-4f42-479e-b873-79834eb29ecc" name="Changes" comment="update heders (v1.4.0)">
+      <change afterPath="$PROJECT_DIR$/lib/test/highCompilerTestSource/Case14.q" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/test/highCompilerTestSource/Case15.q" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/Test.hed" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Test.hed" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/Test.q" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Test.q" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/HederCompiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/HederCompiler.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/HederCompiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/HederCompiler.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/fib.q" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/lib/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/Lexer.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/Lexer.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/Parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/Parser.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/Type.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/Type.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/highCompiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/highCompiler.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/highCompiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/highCompiler.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/token.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/token.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/test/LexerTest.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lib/test/LexerTest.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/test/TestASM.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/test/TestASM.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/test/highCompilerTest.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lib/test/highCompilerTest.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -292,82 +297,16 @@
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib/src/Compiler.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///home/maximgrishin/CLionProjects/qLang/lib/src/Lexer.h" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib/src/Parser.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///home/maximgrishin/CLionProjects/qLang/lib/src/Parser.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///home/maximgrishin/CLionProjects/qLang/lib/src/highCompiler.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib/src/token.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///home/maximgrishin/CLionProjects/qLang/lib/src/token.h" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///home/maximgrishin/CLionProjects/qLang/lib/test/LexerTest.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///home/maximgrishin/CLionProjects/qLang/lib/test/LexerTest.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///home/maximgrishin/CLionProjects/qLang/lib/test/TestASM.h" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib/test/TestASM.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file:///usr/include/c++/12/bits/stl_pair.h" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -400,6 +339,7 @@
     "Google Test.CompilerTest.Case8.executor": "Run",
     "Google Test.ParserTest.Case1.executor": "Run",
     "Google Test.highCompilerTest.Case1.executor": "Run",
+    "Google Test.highCompilerTest.Case14.executor": "Run",
     "Google Test.highCompilerTest.Case2.executor": "Debug",
     "Google Test.highCompilerTest.Case3.executor": "Run",
     "Google Test.highCompilerTest.Case6.executor": "Run",
@@ -419,14 +359,14 @@
     "cidr.known.project.marker": "true",
     "ctest.advertisement.all.test.configuration.is.created": "true",
     "git-widget-placeholder": "master",
-    "last_opened_file_path": "/home/maximgrishin/CLionProjects/qLang",
+    "last_opened_file_path": "/home/maximgrishin/Загрузки/ml-llm-252.23892.426.zip",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "RiderInlayHintsCppOptions",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -529,7 +469,17 @@
       <workItem from="1788512102930" duration="5519000" />
       <workItem from="1788870573303" duration="1538000" />
       <workItem from="1788930688640" duration="4398000" />
-      <workItem from="1789626194293" duration="6172000" />
+      <workItem from="1789626194293" duration="8456000" />
+      <workItem from="1789733188391" duration="4330000" />
+      <workItem from="1790081357359" duration="7000" />
+      <workItem from="1790082555960" duration="80000" />
+      <workItem from="1790170674389" duration="653000" />
+      <workItem from="1790501775332" duration="2068000" />
+      <workItem from="1790675868083" duration="806000" />
+      <workItem from="1790676705110" duration="1392000" />
+      <workItem from="1790678108719" duration="3723000" />
+      <workItem from="1790946723180" duration="15000" />
+      <workItem from="1791820069487" duration="10493000" />
     </task>
     <task id="LOCAL-00001" summary="Lexer">
       <option name="closed" value="true" />
@@ -683,7 +633,15 @@
       <option name="project" value="LOCAL" />
       <updated>1788868554044</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="update heders (v1.4.0)">
+      <option name="closed" value="true" />
+      <created>1789632469509</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1789632469509</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -751,7 +709,8 @@
     <MESSAGE value="add functions overload (v1.3.0)" />
     <MESSAGE value="add labels (v1.3.1)" />
     <MESSAGE value="fix logic variables with identical names (v1.3.2)" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix logic variables with identical names (v1.3.2)" />
+    <MESSAGE value="update heders (v1.4.0)" />
+    <option name="LAST_COMMIT_MESSAGE" value="update heders (v1.4.0)" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
@@ -759,5 +718,9 @@
         <watch expression="res" />
       </configuration>
     </watches-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

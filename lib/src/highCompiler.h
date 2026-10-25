@@ -9,25 +9,26 @@ namespace qlang {
 		std::map<std::string,Function> Functions;
 		std::map<std::string,Variable> Variables;
 
-		BinaryOperator PlusIntOperator;
-		BinaryOperator MinusIntOperator;
-		BinaryOperator MultiplyIntOperator;
-		BinaryOperator DivisionIntOperator;
-		BinaryOperator RemainderIntOperator;
+		BinaryOperator Plus_IntIntToInt_Operator;
+		BinaryOperator Minus_IntIntToInt_OOperator;
+		BinaryOperator Multiply_IntIntToInt_OOperator;
+		BinaryOperator Division_IntIntToInt_OOperator;
+		BinaryOperator Remainder_IntIntToInt_OOperator;
 
-		BinaryOperator LessIntOperator;
-		BinaryOperator GreatIntOperator;
-		BinaryOperator EqualIntOperator;
-		BinaryOperator NotEqualIntOperator;
+		BinaryOperator Less_IntIntToBool_OOperator;
+		BinaryOperator Great_IntIntToBool_Operator;
+		BinaryOperator LessOrEqual_IntIntToBool_Operator;
+		BinaryOperator GreatOrEqual_IntIntToBool_Operator;
+		BinaryOperator Equal_IntIntToBool_Operator;
+		BinaryOperator NotEqual_IntIntToBool_Operator;
 
-		BinaryOperator EqualBoolOperator;
-		BinaryOperator NotEqualBoolOperator;
+		BinaryOperator Equal_BoolBoolToBool_Operator;
+		BinaryOperator NotEqual_BoolBoolToBool_Operator;
+		BinaryOperator Or_BoolBoolToBool_Operator;
+		BinaryOperator And_BoolBoolToBool_Operator;
 
-		BinaryOperator EqualCharOperator;
-		BinaryOperator NotEqualCharOperator;
-
-		BinaryOperator LessOrEqualIntOperator;
-		BinaryOperator GreatOrEqualIntOperator;
+		BinaryOperator Equal_CharCharToBool_Operator;
+		BinaryOperator NotEqual_CharCharToBool_Operator;
 
 		Argument ArgAssignment(token::CODE& code, const Compiler& compiler) const;
 	public:
@@ -39,53 +40,57 @@ namespace qlang {
 				{"int",Type{.type = "int"}}
 			};
 
-			const std::map<const Type*,const Type*,TypeComparator> TypeOpers({{&Types["int"],&Types["int"]}},TypeComparator{});
-			const std::map<const Type*,const Type*,TypeComparator> TypeOpers2({{&Types["int"],&Types["bool"]}},TypeComparator{});
+			const std::map<const Type*,const Type*,TypeComparator> IntIntToInt_Operators({{&Types["int"],&Types["int"]}},TypeComparator{});
+			const std::map<const Type*,const Type*,TypeComparator> IntIntToBool_Operators({{&Types["int"],&Types["bool"]}},TypeComparator{});
 
-			const std::map<const Type*,const Type*,TypeComparator> TypeOpers3({{&Types["bool"],&Types["bool"]}},TypeComparator{});
+			const std::map<const Type*,const Type*,TypeComparator> BoolBoolToBool_Operators({{&Types["bool"],&Types["bool"]}},TypeComparator{});
 
-			const std::map<const Type*,const Type*,TypeComparator> TypeOpers4({{&Types["char"],&Types["bool"]}},TypeComparator{});
+			const std::map<const Type*,const Type*,TypeComparator> CharCharToBool_Operators({{&Types["char"],&Types["bool"]}},TypeComparator{});
 
-			PlusIntOperator = BinaryOperator{.TypeOper = TypeOpers,.asmCode = {{ &Types["int"], "add rax, rbx\n"}}};
-			MinusIntOperator = BinaryOperator{.TypeOper = TypeOpers,.asmCode = {{ &Types["int"], "sub rax, rbx\n"}}};
-			MultiplyIntOperator = BinaryOperator{.TypeOper = TypeOpers,.asmCode = {{ &Types["int"], "mul rbx\n"}}};
-			DivisionIntOperator = BinaryOperator{.TypeOper = TypeOpers,.asmCode = {{ &Types["int"], "mov rdx, 0\ndiv rbx\n"}}};
-			RemainderIntOperator = BinaryOperator{.TypeOper = TypeOpers,.asmCode = {{ &Types["int"], "mov rdx, 0\ndiv rbx\nmov rax, rdx\n"}}};
+			Plus_IntIntToInt_Operator = BinaryOperator{.TypeOper = IntIntToInt_Operators,.asmCode = {{ &Types["int"], "add rax, rbx\n"}}};
+			Minus_IntIntToInt_OOperator = BinaryOperator{.TypeOper = IntIntToInt_Operators,.asmCode = {{ &Types["int"], "sub rax, rbx\n"}}};
+			Multiply_IntIntToInt_OOperator = BinaryOperator{.TypeOper = IntIntToInt_Operators,.asmCode = {{ &Types["int"], "mul rbx\n"}}};
+			Division_IntIntToInt_OOperator = BinaryOperator{.TypeOper = IntIntToInt_Operators,.asmCode = {{ &Types["int"], "mov rdx, 0\ndiv rbx\n"}}};
+			Remainder_IntIntToInt_OOperator = BinaryOperator{.TypeOper = IntIntToInt_Operators,.asmCode = {{ &Types["int"], "mov rdx, 0\ndiv rbx\nmov rax, rdx\n"}}};
 
-			LessIntOperator = BinaryOperator{.TypeOper = TypeOpers2,.asmCode = {{ &Types["int"], "cmp rax, rbx\nsetl bl\nmovzx rax, bl\n"}}};
-			GreatIntOperator = BinaryOperator{.TypeOper = TypeOpers2,.asmCode = {{ &Types["int"], "cmp rax, rbx\nsetg bl\nmovzx rax, bl\n"}}};
-			EqualIntOperator = BinaryOperator{.TypeOper = TypeOpers2,.asmCode = {{ &Types["int"], "cmp rax, rbx\nsete bl\nmovzx rax, bl\n"}}};
-			NotEqualIntOperator = BinaryOperator{.TypeOper = TypeOpers2,.asmCode = {{ &Types["int"], "cmp rax, rbx\nsetne bl\nmovzx rax, bl\n"}}};
-			LessOrEqualIntOperator = BinaryOperator{.TypeOper = TypeOpers2,.asmCode = {{ &Types["int"], "cmp rax, rbx\nsetle bl\nmovzx rax, bl\n"}}};
-			GreatOrEqualIntOperator = BinaryOperator{.TypeOper = TypeOpers2,.asmCode = {{ &Types["int"], "cmp rax, rbx\nsetge bl\nmovzx rax, bl\n"}}};
+			Less_IntIntToBool_OOperator = BinaryOperator{.TypeOper = IntIntToBool_Operators,.asmCode = {{ &Types["int"], "cmp rax, rbx\nsetl bl\nmovzx rax, bl\n"}}};
+			Great_IntIntToBool_Operator = BinaryOperator{.TypeOper = IntIntToBool_Operators,.asmCode = {{ &Types["int"], "cmp rax, rbx\nsetg bl\nmovzx rax, bl\n"}}};
+			Equal_IntIntToBool_Operator = BinaryOperator{.TypeOper = IntIntToBool_Operators,.asmCode = {{ &Types["int"], "cmp rax, rbx\nsete bl\nmovzx rax, bl\n"}}};
+			NotEqual_IntIntToBool_Operator = BinaryOperator{.TypeOper = IntIntToBool_Operators,.asmCode = {{ &Types["int"], "cmp rax, rbx\nsetne bl\nmovzx rax, bl\n"}}};
+			LessOrEqual_IntIntToBool_Operator = BinaryOperator{.TypeOper = IntIntToBool_Operators,.asmCode = {{ &Types["int"], "cmp rax, rbx\nsetle bl\nmovzx rax, bl\n"}}};
+			GreatOrEqual_IntIntToBool_Operator = BinaryOperator{.TypeOper = IntIntToBool_Operators,.asmCode = {{ &Types["int"], "cmp rax, rbx\nsetge bl\nmovzx rax, bl\n"}}};
 
-			EqualBoolOperator = BinaryOperator{.TypeOper = TypeOpers3,.asmCode = {{ &Types["bool"], "cmp rax, rbx\nsete bl\nmovzx rax, bl\n"}}};
-			NotEqualBoolOperator = BinaryOperator{.TypeOper = TypeOpers3,.asmCode = {{ &Types["bool"], "cmp rax, rbx\nsetne bl\nmovzx rax, bl\n"}}};
+			Equal_BoolBoolToBool_Operator = BinaryOperator{.TypeOper = BoolBoolToBool_Operators,.asmCode = {{ &Types["bool"], "cmp rax, rbx\nsete bl\nmovzx rax, bl\n"}}};
+			NotEqual_BoolBoolToBool_Operator = BinaryOperator{.TypeOper = BoolBoolToBool_Operators,.asmCode = {{ &Types["bool"], "cmp rax, rbx\nsetne bl\nmovzx rax, bl\n"}}};
+			Or_BoolBoolToBool_Operator = BinaryOperator{.TypeOper = BoolBoolToBool_Operators,.asmCode = {{ &Types["bool"], "or rax, rbx\n"}}};
+			And_BoolBoolToBool_Operator = BinaryOperator{.TypeOper = BoolBoolToBool_Operators,.asmCode = {{ &Types["bool"], "and rax, rbx\n"}}};
 
-			EqualCharOperator = BinaryOperator{.TypeOper = TypeOpers4,.asmCode = {{ &Types["char"], "cmp rax, rbx\nsete bl\nmovzx rax, bl\n"}}};
-			NotEqualCharOperator = BinaryOperator{.TypeOper = TypeOpers4,.asmCode = {{ &Types["char"], "cmp rax, rbx\nsetne bl\nmovzx rax, bl\n"}}};
+			Equal_CharCharToBool_Operator = BinaryOperator{.TypeOper = CharCharToBool_Operators,.asmCode = {{ &Types["char"], "cmp rax, rbx\nsete bl\nmovzx rax, bl\n"}}};
+			NotEqual_CharCharToBool_Operator = BinaryOperator{.TypeOper = CharCharToBool_Operators,.asmCode = {{ &Types["char"], "cmp rax, rbx\nsetne bl\nmovzx rax, bl\n"}}};
 
 			const std::map<std::string,BinaryOperator*> intOperators = {
-				{"+",&PlusIntOperator},
-				{"-",&MinusIntOperator},
-				{"*",&MultiplyIntOperator},
-				{"/",&DivisionIntOperator},
-				{"%",&RemainderIntOperator},
+				{"+",&Plus_IntIntToInt_Operator},
+				{"-",&Minus_IntIntToInt_OOperator},
+				{"*",&Multiply_IntIntToInt_OOperator},
+				{"/",&Division_IntIntToInt_OOperator},
+				{"%",&Remainder_IntIntToInt_OOperator},
 
-				{"<",&LessIntOperator},
-				{">",&GreatIntOperator},
-				{"==",&EqualIntOperator},
-				{"!=",&NotEqualIntOperator},
-				{"<=",&LessOrEqualIntOperator},
-				{">=",&GreatOrEqualIntOperator}
+				{"<",&Less_IntIntToBool_OOperator},
+				{">",&Great_IntIntToBool_Operator},
+				{"==",&Equal_IntIntToBool_Operator},
+				{"!=",&NotEqual_IntIntToBool_Operator},
+				{"<=",&LessOrEqual_IntIntToBool_Operator},
+				{">=",&GreatOrEqual_IntIntToBool_Operator}
 			};
 			const std::map<std::string,BinaryOperator*> boolOperators = {
-				{"==",&EqualBoolOperator},
-				{"!=",&NotEqualBoolOperator},
+				{"==",&Equal_BoolBoolToBool_Operator},
+				{"!=",&NotEqual_BoolBoolToBool_Operator},
+				{"||",&Or_BoolBoolToBool_Operator},
+				{"&&",&And_BoolBoolToBool_Operator},
 			};
 			const std::map<std::string,BinaryOperator*> charOperators = {
-				{"==",&EqualCharOperator},
-				{"!=",&NotEqualCharOperator},
+				{"==",&Equal_CharCharToBool_Operator},
+				{"!=",&NotEqual_CharCharToBool_Operator},
 			};
 
 			Types["int"].binaryOperators = intOperators;

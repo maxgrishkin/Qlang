@@ -230,10 +230,6 @@ namespace qlang::Lexer{
 					symbol++;
 					break;
 				}
-				case '%':
-					result.emplace_back(std::make_pair(token::Percent{},std::make_pair(line,symbol)));
-					symbol++;
-					break;
 				case '"': {
 					std::string res;
 					unsigned int presymbol = symbol;
@@ -283,6 +279,28 @@ namespace qlang::Lexer{
 					result.emplace_back(std::make_pair(token::String{.value = res},std::make_pair(line,presymbol)));
 					break;
 				}
+				case '%':
+					result.emplace_back(std::make_pair(token::Percent{},std::make_pair(line,symbol)));
+					symbol++;
+					break;
+				case '|':
+					if (code[i + 1] != '|') {
+						std::string character = {code[i + 1]};
+						throw std::runtime_error("Unexpected character after | : " + character + ", at line " + std::to_string(line) + ", at symbol " + std::to_string(symbol) + " expected |");
+					}
+					result.emplace_back(std::make_pair(token::OR{},std::make_pair(line,symbol)));
+					i += 2;
+					symbol += 2;
+					break;
+				case '&':
+					if (code[i + 1] != '&') {
+						std::string character = {code[i + 1]};
+						throw std::runtime_error("Unexpected character after & : " + character + ", at line " + std::to_string(line) + ", at symbol " + std::to_string(symbol) + " expected &");
+					}
+					result.emplace_back(std::make_pair(token::AND{},std::make_pair(line,symbol)));
+					i += 2;
+					symbol += 2;
+					break;
 				default: {
 					unsigned short preSymbol = symbol;
 					if (std::isalpha(code[i])) {

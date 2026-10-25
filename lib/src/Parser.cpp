@@ -40,7 +40,11 @@ qlang::Value qlang::Parser::ParseExpression(token::CODE& code, int left_binding_
 			},
 			[&](token::LPar) -> Value {
 				code.erase(code.begin());
-				auto value = ParseExpression(code,rbp);
+				auto value = ParseExpression(code,0);
+				if (!std::holds_alternative<token::RPar>(code[0].first)) {
+					throw std::runtime_error("Unexpected token: " + token::TokenToString(code[0].first) + ", at line " + std::to_string(code[0].second.first) + ", at symbol " + std::to_string(code[0].second.second) + " expected RPar");
+				}
+				code.erase(code.begin());
 				return value;
 			}
 		),code[0].first);
@@ -53,11 +57,18 @@ qlang::Value qlang::Parser::ParseExpression(token::CODE& code, int left_binding_
 		auto typeOper = lType->binaryOperators.find(_operator);
 		if (typeOper == lType->binaryOperators.end())
 			throw std::runtime_error("This operator not exists, at line " + std::to_string(line) + ", at symbol " + std::to_string(symbol));
+		std::string codeOperator{};
+		if (const auto it = typeOper->second->asmCode.find(val.type); it != typeOper->second->asmCode.end()) {
+			codeOperator = it->second;
+		}
+		else {
+			throw std::runtime_error("This operator not exists, at line " + std::to_string(line) + ", at symbol " + std::to_string(symbol));
+		}
 		std::string resStr = "push rax\n";
 		resStr += val.code;
 		resStr += "mov rbx,rax\n";
 		resStr += "pop rax\n";
-		resStr += typeOper->second->asmCode.at(val.type);
+		resStr += codeOperator;
 		return Value{.code = resStr, .type = typeOper->second->TypeOper.at(val.type)};
 	};
 	auto Operator = [&code, generateBinaryOperator](const Type* lType, const int rbp, const int lbp) -> Value {
@@ -104,8 +115,13 @@ qlang::Value qlang::Parser::ParseExpression(token::CODE& code, int left_binding_
 		[&](token::RAngleBracketEqual) -> Value {
 			return generateBinaryOperator(lType, ">=", true, rbp);
 		},
+		[&](token::OR) -> Value {
+			return generateBinaryOperator(lType, "||", true, rbp);
+		},
+		[&](token::AND) -> Value {
+			return generateBinaryOperator(lType, "&&", true, rbp);
+		},
 		[&](token::RPar) -> Value {
-			code.erase(code.begin());
 			return Value{.code = "", .type = nullptr};
 		}
 		),code[0].first);
@@ -154,7 +170,6 @@ qlang::Value qlang::Parser::VariableReference(token::CODE &code) const {
 	const auto args = compiler->getParentFunc().args.second;
 	for (unsigned int i = 0;i < args.size();++i) {
 		if (args[i] == name) {
-			auto type = const_cast<Type*>(compiler->getParentFunc().args.first[i]);
 			std::string asmCode;
 			if (i + 1 == 1) {
 				asmCode += "mov rax, rdi \n";
@@ -177,7 +192,7 @@ qlang::Value qlang::Parser::VariableReference(token::CODE &code) const {
 			else if (i + 1 > 6) {
 				asmCode += "mov rax, qword [rbp + " + std::to_string((args.size() - i - 1) * 8) + "]\n";
 			}
-			return Value{.code = asmCode,.type = type};
+			return Value{.code = asmCode,.type = const_cast<Type*>(compiler->getParentFunc().args.first[i])};
 		}
 	}
 	throw std::runtime_error("Variable is not exist (you invalid), at line " + std::to_string(position.first) + ", at symbol " + std::to_string(position.second));

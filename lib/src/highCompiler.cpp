@@ -180,7 +180,7 @@ std::vector<std::string> qlang::highCompiler::Compiling(const std::string &path,
 	OFile << res.otherFunks;
 	OFile.close();
 
-	system(("nasm -f elf64 -g " + nameFile + ".asm  -o " + nameFile + ".o").c_str());
+	system(("nasm -f elf64 " + nameFile + ".asm  -o " + nameFile + ".o").c_str());
 	oF.push_back(nameFile + ".o");
 	system(("rm " + nameFile + ".asm").c_str());
 

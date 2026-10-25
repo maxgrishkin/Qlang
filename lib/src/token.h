@@ -34,6 +34,8 @@ namespace qlang::token {
     struct RAngleBracket {};   // <
     struct LAngleBracketEqual {};   // <=
     struct RAngleBracketEqual {};   // >=
+    struct OR {};   // ||
+    struct AND {};   // &&
     struct Semicolon {};   // ;
     struct Colon {};   // :
     struct Plus {};   // +
@@ -65,7 +67,7 @@ namespace qlang::token {
     using Any = std::variant<
     Keyword, LPar, RPar, Equal, Equal2, LCurlyBracket, RCurlyBracket, Semicolon, Colon, Comma, Plus, Minus, Asterisk, Slash, Identifier,
     Integer, String,LSquareBracket,RSquareBracket,LAngleBracket,RAngleBracket,LAngleBracketEqual,RAngleBracketEqual,PlusPlus,MinusMinus,
-    NoEqual,Char,Dot,Hash,Percent>;
+    NoEqual,Char,Dot,Hash,Percent,OR,AND>;
 
     using CODE = std::vector<std::pair<Any,std::pair<unsigned int,unsigned short>>>;
 
@@ -115,6 +117,8 @@ namespace qlang::token {
                 [](RAngleBracket)-> std::string  { return ">"; },
                 [](LAngleBracketEqual)-> std::string  { return "<="; },
                 [](RAngleBracketEqual)-> std::string  { return ">="; },
+                [](OR)-> std::string  { return "||"; },
+                [](AND)-> std::string  { return "&&"; },
                 [](PlusPlus)-> std::string  { return "++"; },
                 [](MinusMinus)-> std::string  { return "--"; },
                 [](const Identifier& id)-> std::string  { return "identifier:" + id.value; },
